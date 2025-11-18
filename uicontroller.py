@@ -12,5 +12,14 @@ class UIController:
     def __init__(self):
         self.ui = UI()
         self.model = Model()
-    def initItems(self): 
+    def refreshItems(self): 
         self.items = self.model.load()
+    def onLogin(self):
+        # todo
+        self = self
+    def initClickEvents(self):
+        # todo
+        self = self
+    def onFilterSelected(self):
+        # todo
+        self = self
