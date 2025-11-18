@@ -1,9 +1,9 @@
 class User:
-    firstName = ''
-    lastName = ''
-    userName = ''
-    password = ''
-    role = ''
+    firstName: str
+    lastName: str
+    userName: str
+    password: str
+    role: str
 
     def __init__(self,firstName, lastName, userName, password, role):
         self.firstName = firstName
