@@ -22,7 +22,6 @@ class UIController:
         password = self.ui.fLoginPage.fPassword.text()
         if(password.__len__() > 0 and username.__len__() > 0):
             user = self.model.login(username, hash(password))
-            null = null
             if(not isinstance(user, User)):
                 self.ui.showError('login')
                 return
