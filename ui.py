@@ -1,10 +1,9 @@
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import *
-import sys
-class UI(QMainWindow):
+
+class UI():
     def __init__(self):
         super().__init__()
-        self.title = 'Hello, world!'
         self.left = 1000
         self.top = 1000
         self.width = 1000
@@ -26,7 +25,6 @@ class UI(QMainWindow):
         InputPassword.move(400, 500)
         InputPassword.resize(280, 40)
 
-        # Button
         InputLoginButton = QPushButton('Anmelden', self)
         InputLoginButton.move(400, 600)
 
@@ -36,13 +34,7 @@ class UI(QMainWindow):
 
         layout.setSpacing(10)
         layout.setContentsMargins(20, 20, 20, 20)
-        self.show()
     def showAdminPage(page):
         page = page
     def showInventoryPage(page):
         page = page
-
-app = QApplication(sys.argv)
-ui = UI()
-ui.showLoginPage()
-sys.exit(app.exec())
