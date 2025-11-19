@@ -7,19 +7,22 @@ class Page(QMainWindow):
         self.setFixedSize(1000, 600)
     def showPage(self):
         self.show()
-    def createButton(self, name:str, x, y):
+    def createButton(self, name:str, x = None, y = None):
         button = QPushButton(name, self)
-        button.move(x, y)
+        if x != None and y != None:
+            button.move(x, y)
 
         return button
-    def createInput(self, placeHolderName:str, x, y):
+    def createInput(self, placeHolderName:str, x = None, y = None):
         input = QLineEdit(self)
         input.setPlaceholderText(placeHolderName)
-        input.move(x, y)
+        if x != None and y != None:
+            input.move(x, y)
 
         return input
-    def createText(self, name:str,x, y):
+    def createText(self, name:str,x = None, y = None):
         label = QLabel(name)
-        label.move(x, y)
+        if x != None and y != None:
+            label.move(x, y)
 
         return label
