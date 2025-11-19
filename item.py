@@ -5,8 +5,12 @@ class Item:
     location: str
     responsiblePerson: str
 
-    def __init__(self): 
-        self = self
+    def __init__(self,group,department, subject, location, responsiblePerson): 
+        self.group = group
+        self.department = department
+        self.subject = subject
+        self.location = location 
+        self.responsiblePerson = responsiblePerson
         
     def getGroup(self): 
         return self.group
