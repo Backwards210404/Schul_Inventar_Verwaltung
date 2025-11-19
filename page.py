@@ -1,25 +1,24 @@
 from PyQt6.QtWidgets import *
 
 class Page(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setGeometry(1000, 1000, 1000, 1000)
     def showPage(self):
         self.show()
-    def createButton(self, name:str, position:tuple):
+    def createButton(self, name:str, x, y):
         button = QPushButton(name, self)
-        button.move(position)
+        button.move(x, y)
 
         return button
-    def createInput(self, placeHolderName:str, position):
+    def createInput(self, placeHolderName:str, x, y):
         input = QLineEdit(self)
         input.setPlaceholderText(placeHolderName)
-        input.move(position)
+        input.move(x, y)
 
         return input
-    def createHeader(self, name:str)
-    def createText(self, name:str,position: tuple):
+    def createText(self, name:str,x, y):
         label = QLabel(name)
-        label.move(position)
+        label.move(x, y)
 
         return label
-    def createButton(self, name:str)
-    def createButton(self, name:str)
-    def createButton(self, name:str)
