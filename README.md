@@ -1,1 +1,0 @@
-# Schul_Inventar_Verwaltung

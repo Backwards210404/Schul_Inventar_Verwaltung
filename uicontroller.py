@@ -12,6 +12,7 @@ class UIController:
     def __init__(self):
         self.ui = UI()
         self.model = Model()
+        self.ui.showLoginPage()
     def refreshItems(self): 
         self.items = self.model.load()
     def onLogin(self):
