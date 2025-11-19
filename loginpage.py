@@ -1,6 +1,5 @@
 from page import Page
 from PyQt6.QtWidgets import *
-from screeninfo import *
 
 class LoginPage(Page):
     fLoginButton:QPushButton

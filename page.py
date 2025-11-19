@@ -1,15 +1,10 @@
 from PyQt6.QtWidgets import *
-from screeninfo import *
-
-
 class Page(QMainWindow):
 
-    fScreen:Monitor
 
     def __init__(self):
         super().__init__()
-        self.fScreen = get_monitors().__getitem__(0) 
-        self.setGeometry(1, 1, self.fScreen.width, self.fScreen.height)
+        self.setFixedSize(1000, 600)
     def showPage(self):
         self.show()
     def createButton(self, name:str, x, y):
