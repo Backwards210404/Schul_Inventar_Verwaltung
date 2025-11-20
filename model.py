@@ -81,3 +81,9 @@ class Model:
 
     def clear_items(self) -> None:
         self.items.clear()
+
+    def login(self, userName: str, password: str) -> User | None:
+        for u in self.users:
+            if u.userName == userName and u.password == password:
+                return u
+        return None
