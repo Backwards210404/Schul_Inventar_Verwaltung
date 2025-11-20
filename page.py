@@ -1,4 +1,5 @@
 from PyQt6.QtWidgets import *
+from PyQt6.QtCore import Qt
 class Page(QMainWindow):
 
 
@@ -11,7 +12,6 @@ class Page(QMainWindow):
         button = QPushButton(name, self)
         if x != None and y != None:
             button.move(x, y)
-
         return button
     def createInput(self, placeHolderName:str, x = None, y = None):
         input = QLineEdit(self)
@@ -22,6 +22,7 @@ class Page(QMainWindow):
         return input
     def createText(self, name:str,x = None, y = None):
         label = QLabel(name)
+        label.setAlignment(Qt.AlignmentFlag.AlignHCenter)
         if x != None and y != None:
             label.move(x, y)
 

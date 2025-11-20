@@ -6,25 +6,31 @@ class LoginPage(Page):
     fLoginButton:QPushButton
     fUserName: QLineEdit
     fPassword: QLineEdit
-    fLayout: QVBoxLayout
+    fVLayout: QVBoxLayout
+    fTitle: QLabel
     def __init__(self):
         super().__init__()
         self.setWindowTitle('Login')
         self.createInputWidgets()
         self.createLayoutWithWidgets()
-
+    def createInputWidgets(self):
+        self.fUserName = self.createInput('Benutzername')
+        self.fPassword = self.createInput('Passwort')
+        self.fLoginButton = self.createButton('Anmelden')
+        self.fTitle = self.createText("Willkommen!")
     def createLayoutWithWidgets(self):
-        self.fLayout = QVBoxLayout()
-        self.setAutoFillBackground(True)
+        centralWidget = QWidget()
+        self.setCentralWidget(centralWidget)
+
+        self.fVLayout = QVBoxLayout()
         widgets = [
-            self.fLoginButton,
+            self.fTitle,
             self.fUserName,
-            self.fPassword
+            self.fPassword,
+            self.fLoginButton,
         ]
         for widget in widgets:
-            self.fLayout.addWidget(widget)
-    def createInputWidgets(self):
-        self.fLoginButton = self.createButton('Anmelden',0,100)
-        self.fUserName = self.createInput('Benutzername',0,200)
-        self.fPassword = self.createInput('Passwort',0,300)
+            self.fVLayout.addWidget(widget)
+        centralWidget.setContentsMargins(350, 150, 350, 200)
+        centralWidget.setLayout(self.fVLayout)
     
