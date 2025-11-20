@@ -8,6 +8,7 @@ class Model:
         self.db_path = db_path
         self.users: List[User] = []
         self.items: List[Item] = []
+        self.load()
 
     def _ensure_tables(self, conn: sqlite3.Connection) -> None:
         conn.execute("""
