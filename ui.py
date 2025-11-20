@@ -12,7 +12,6 @@ class UI():
     def showStandardPage(page):
         page = page
     def showLoginPage(self):
-        self.fLoginPage.setLayout(self.fLoginPage.fLayout)
         self.fLoginPage.show()
         #TODO: Login Fehler einfügen
     def showAdminPage(page):
