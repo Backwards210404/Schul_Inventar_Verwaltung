@@ -6,6 +6,7 @@ class Page(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setFixedSize(1000, 600)
+        self.setStyleSheet("background-color: white;")
     def showPage(self):
         self.show()
     def createButton(self, name:str, x = None, y = None):
@@ -22,6 +23,13 @@ class Page(QMainWindow):
         return input
     def createText(self, name:str,x = None, y = None):
         label = QLabel(name)
+        label.setAlignment(Qt.AlignmentFlag.AlignHCenter)
+        if x != None and y != None:
+            label.move(x, y)
+
+        return label
+    def createTitle(self, name:str,x = None, y = None):
+        label = QLabel('<h1>' + name + '</h1>')
         label.setAlignment(Qt.AlignmentFlag.AlignHCenter)
         if x != None and y != None:
             label.move(x, y)

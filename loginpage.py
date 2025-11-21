@@ -13,16 +13,25 @@ class LoginPage(Page):
         self.setWindowTitle('Login')
         self.createInputWidgets()
         self.createLayoutWithWidgets()
+        self.styleSheet()
     def createInputWidgets(self):
         self.fUserName = self.createInput('Benutzername')
         self.fPassword = self.createInput('Passwort')
         self.fLoginButton = self.createButton('Anmelden')
-        self.fTitle = self.createText("Willkommen!")
+        self.fTitle = self.createTitle('Willkommen!')
+
     def createLayoutWithWidgets(self):
         centralWidget = QWidget()
-        self.setCentralWidget(centralWidget)
+        self.fUserName.setProperty('class', 'loginElements')
+        self.fPassword.setProperty('class', 'loginElements')
+        self.fLoginButton.setProperty('class', 'loginElements')
+
+        centralWidget.setProperty('class', 'loginPage')
 
         self.fVLayout = QVBoxLayout()
+        self.fVLayout.setProperty('class', 'VLayout')
+        centralWidget.setMinimumWidth(500)
+        centralWidget.setMinimumHeight(300)
         widgets = [
             self.fTitle,
             self.fUserName,
@@ -30,7 +39,15 @@ class LoginPage(Page):
             self.fLoginButton,
         ]
         for widget in widgets:
+            widget.setMinimumHeight(40)
+            widget.setMinimumWidth(300)
+            self.fVLayout.addStretch()
             self.fVLayout.addWidget(widget)
+
         centralWidget.setContentsMargins(350, 150, 350, 200)
+        self.setCentralWidget(centralWidget)
         centralWidget.setLayout(self.fVLayout)
+    def styleSheet(self):
+        styleSheet = open('./stylesheetlogin.css').read()
+        self.setStyleSheet(styleSheet)
     
