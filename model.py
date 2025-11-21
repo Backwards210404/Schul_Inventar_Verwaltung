@@ -8,6 +8,7 @@ class Model:
         self.db_path = db_path
         self.users: List[User] = []
         self.items: List[Item] = []
+        self.load()
 
     def _ensure_tables(self, conn: sqlite3.Connection) -> None:
         conn.execute("""
@@ -70,16 +71,16 @@ class Model:
             ]
 
 
-    def add_user(self, user: User) -> None:
+    def addUser(self, user: User) -> None:
         self.users.append(user)
 
-    def add_item(self, item: Item) -> None:
+    def addItem(self, item: Item) -> None:
         self.items.append(item)
 
-    def clear_users(self) -> None:
+    def clearUsers(self) -> None:
         self.users.clear()
 
-    def clear_items(self) -> None:
+    def clearItems(self) -> None:
         self.items.clear()
 
     def login(self, userName: str, password: str) -> User | None:

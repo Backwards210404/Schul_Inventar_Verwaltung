@@ -2,7 +2,7 @@ from item import Item
 from model import Model
 from ui import UI
 from user import User
-
+from PyQt6.QtCore import *
 
 class UIController:
 
@@ -15,15 +15,18 @@ class UIController:
         self.model = Model()
         self.ui.showLoginPage()
         self.initClickEvents()
+    
     def refreshItems(self): 
-        self.items = self.model.load()
+        self.model.load()
+        self.items = self.model.items
+
     def onLogin(self):
         username = self.ui.fLoginPage.fUserName.text()
         password = self.ui.fLoginPage.fPassword.text()
         if(password.__len__() > 0 and username.__len__() > 0):
             user = self.model.login(username, hash(password))
             if(not isinstance(user, User)):
-                self.ui.showError('login')
+                # self.ui.showError('login')
                 return
             if(user.getRole() == 'admin'):
                 self.ui.showAdminPage()
