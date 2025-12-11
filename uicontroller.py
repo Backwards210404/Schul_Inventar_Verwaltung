@@ -13,7 +13,7 @@ class UIController:
     def __init__(self):
         self.ui = UI()
         self.model = Model()
-        self.ui.showLoginPage()
+        self.ui.showStandardPage()
         self.initClickEvents()
     
     def refreshItems(self): 
@@ -33,6 +33,7 @@ class UIController:
             else:
                 self.ui.showInventoryPage()
     def initClickEvents(self):
+        return #TODO: Die Codezeile unten nur aufrufen wenn die Loginpage aufgerufen wird.
         self.ui.fLoginPage.fLoginButton.clicked.connect(self.onLogin)
     def onFilterSelected(self):
         # todo

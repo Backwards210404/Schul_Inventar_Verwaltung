@@ -41,13 +41,12 @@ class LoginPage(Page):
         for widget in widgets:
             widget.setMinimumHeight(40)
             widget.setMinimumWidth(300)
-            self.fVLayout.addStretch()
             self.fVLayout.addWidget(widget)
-
+        self.fVLayout.addStretch(1)
         centralWidget.setContentsMargins(350, 150, 350, 200)
         self.setCentralWidget(centralWidget)
         centralWidget.setLayout(self.fVLayout)
     def styleSheet(self):
-        styleSheet = open('./stylesheetlogin.css').read()
+        styleSheet = open('./stylesheets/login.css').read()
         self.setStyleSheet(styleSheet)
     
