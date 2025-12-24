@@ -13,6 +13,7 @@ class AdminPage(Page):
         self.setWindowTitle('Admin')
         self.createInputWidgets()
         self.createMainWidgets()
+        self.styleSheet()
     def createInputWidgets(self):
         self.fHeaderButton = self.createButton('Logout', 850, 6)
 
@@ -24,24 +25,10 @@ class AdminPage(Page):
         )
         self.fNewEntryButtton = self.createButton('+', self.width - 100, self.height - 100)
         self.fNewEntryButtton.setFixedSize(75, 75)
-        self.fNewEntryButtton.setStyleSheet("""
-        QPushButton {
-            border-radius: 35px;
-            background-color: #3498db;
-            color: white;
-            border: 2px solid #2980b9;  
-            font-size: 30px;
-            text-align: center;                                     
-        }
-        QPushButton:hover {
-            background-color: transparent;
-            border: 1px solid black;
-            color: black;                                
-        }
-        """)
+        self.fNewEntryButtton.setProperty('class', 'newEntryButton')
 
     def styleSheet(self):
-        self.fSidePanel.setStyleSheet('background: Gainsboro')
-        self.fHeader.setStyleSheet('background: grey')
+        styleSheet = open('./stylesheets/admin.css').read()
+        self.setStyleSheet(styleSheet)
 
     
