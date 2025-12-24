@@ -1,6 +1,5 @@
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import Qt
-from PyQt6 import QtGui
 class Page(QMainWindow):
 
 
@@ -17,6 +16,11 @@ class Page(QMainWindow):
         if x != None and y != None:
             button.move(x, y)
         return button
+    def createDropDownMenu(self, wordList: list):
+        dropDownMenu = QComboBox(self)
+        dropDownMenu.addItems(wordList)
+
+        return dropDownMenu
     def createInput(self, placeHolderName:str, x = None, y = None):
         input = QLineEdit(self)
         input.setPlaceholderText(placeHolderName)
@@ -57,12 +61,16 @@ class Page(QMainWindow):
             label.move(x, y)
 
         return label
-    def createTable(self, tableHeaders: list, x = None, y = None):
+    def createTable(self, tableHeaders: list, x = None, y = None, width = None):
         table = QTableWidget(self)
         table.setColumnCount(len(tableHeaders))
-        table.setFixedSize(800,550)
+        if (width != None):
+            table.setFixedSize(width,550)
+        else:
+            table.setFixedSize(1000,550)
         table.resizeColumnToContents(len(tableHeaders))
         table.setHorizontalHeaderLabels(tableHeaders)
+        table.horizontalHeader().setStyleSheet("QHeaderView::section { border: 1px solid gray; }")
         if x != None and y != None:
             table.move(x, y)
 
