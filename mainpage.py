@@ -24,7 +24,7 @@ class MainPage(Page):
 
     def createMainWidgets(self):
         distanceSidePanel = 200
-        tableHeaders = ['Gruppe', 'Abteilung', 'Fach', 'Ort', 'Verantworlicher']
+        tableHeaders = ['Gruppe', 'Abteilung', 'Fach', 'Ort', 'Verantworlicher', 'Löschen']
 
         self.fTable = self.createTable(tableHeaders ,x = distanceSidePanel, y = 50, width = 850)
         self.fTable.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)

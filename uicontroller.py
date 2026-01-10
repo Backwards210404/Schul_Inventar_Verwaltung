@@ -35,12 +35,12 @@ class UIController:
     def onLogin(self):
         username = self.ui.fLoginPage.fUserName.text()
         password = self.ui.fLoginPage.fPassword.text()
-        if(password.__len__() > 0 and username.__len__() > 0):
+        if password.__len__() > 0 and username.__len__() > 0:
             user = self.model.login(username, self.hashPassword(password))
-            if(not isinstance(user, User)):
+            if not isinstance(user, User):
                 self.showLoginError()
                 return
-            if(user.getRole() == 'admin'):
+            if user.getRole() == 'admin':
                 self.ui.hideLoginPage()
                 self.ui.showAdminPage()
                 self.initAdminPageEvents()
@@ -91,6 +91,7 @@ class UIController:
         table.setItem(rowCount, 2, QTableWidgetItem(item.subject))
         table.setItem(rowCount, 3, QTableWidgetItem(item.location))
         table.setItem(rowCount, 4, QTableWidgetItem(item.responsiblePerson))
+        table.setCellWidget(rowCount,5, self.getDeleteButton(table))
     def onSearchInLoginTable(self):
         attribute = self.ui.fMainPage.fFilterDropDown.currentText()
         searchText = self.ui.fMainPage.fFilterInput.text().lower()
@@ -122,11 +123,23 @@ class UIController:
                     table.setItem(rowCount, 2, QTableWidgetItem(item.subject))
                     table.setItem(rowCount, 3, QTableWidgetItem(item.location))
                     table.setItem(rowCount, 4, QTableWidgetItem(item.responsiblePerson))
+                    table.setCellWidget(rowCount,5, self.getDeleteButton(table))
+    def getDeleteButton(self,table ):
+        deleteButton = QPushButton("Löschen")
+        deleteButton.clicked.connect(lambda: self.removeRowAtButton(deleteButton, table))
+        return deleteButton
+    def removeRowAtButton(self, deleteButton, table):
+        if deleteButton:
+            index = table.indexAt(deleteButton.pos())
+            if index.isValid():
+                table.removeRow(index.row())
+                self.model.items.pop(index.row())
+        self.model.save()
 
     def loadItemTableData(self):
         for item in self.items:
             table = self.ui.fMainPage.fTable
-            table.setRowCount(0)
+            table.setRowCount(self.items.index(item))
             rowCount = table.rowCount()
             table.insertRow(rowCount)
             table.setItem(rowCount, 0, QTableWidgetItem(item.group))
@@ -134,6 +147,7 @@ class UIController:
             table.setItem(rowCount, 2, QTableWidgetItem(item.subject))
             table.setItem(rowCount, 3, QTableWidgetItem(item.location))
             table.setItem(rowCount, 4, QTableWidgetItem(item.responsiblePerson))
+            table.setCellWidget(rowCount, 5, self.getDeleteButton(table))
 
     def loadUserTableData(self):
         for user in self.users:
@@ -146,6 +160,7 @@ class UIController:
             table.setItem(rowCount, 1, QTableWidgetItem(user.lastName))
             table.setItem(rowCount, 2, QTableWidgetItem(user.userName))
             table.setItem(rowCount, 3, QTableWidgetItem(user.role))
+            table.setCellWidget(rowCount, 4, self.getDeleteButton(table))
     def onLogout(self):
         self.ui.hideInventoryPage()
         self.ui.hideAdminPage()
