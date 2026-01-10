@@ -5,6 +5,7 @@ from user import User
 from additemdialog import AddItemDialog
 from PyQt6.QtWidgets import *
 import hashlib
+import csv
 
 class UIController:
 
@@ -38,7 +39,7 @@ class UIController:
         if password.__len__() > 0 and username.__len__() > 0:
             user = self.model.login(username, self.hashPassword(password))
             if not isinstance(user, User):
-                self.showLoginError()
+                self.showErrorMessage()
                 return
             if user.getRole() == 'admin':
                 self.ui.hideLoginPage()
@@ -49,7 +50,7 @@ class UIController:
                 self.ui.showInventoryPage()
                 self.initInventoryPageEvents()
 
-    def showLoginError(self):
+    def showErrorMessage(self):
         errorDialog = QMessageBox(self.ui.fLoginPage)
         errorDialog.setIcon(QMessageBox.Icon.Warning)
         errorDialog.setWindowTitle('Login Fehler')
@@ -70,6 +71,7 @@ class UIController:
         self.ui.fMainPage.fAddItemButton.clicked.connect(self.onAddItem)
         self.ui.fMainPage.fFilterButton.clicked.connect(self.onSearchInLoginTable)
         self.ui.fMainPage.fHeaderButton.clicked.connect(self.onLogout)
+        self.ui.fMainPage.fExportButton.clicked.connect(self.createCsvExportFile)
         self.refreshItems()
         self.loadItemTableData()
 
@@ -167,4 +169,30 @@ class UIController:
         self.ui.fLoginPage.fUserName.clear()
         self.ui.fLoginPage.fPassword.clear()
         self.ui.showLoginPage()
+
+    def showCSVMessage(self):
+        csvDialog = QMessageBox(self.ui.fAdminPage)
+        csvDialog.setIcon(QMessageBox.Icon.Information)
+        csvDialog.setWindowTitle('Tabelle exportiert')
+        csvDialog.setText('Die Tabelle wurde in einer CSV Datei exportiert!')
+        csvDialog.setStandardButtons(QMessageBox.StandardButton.Ok)
+        csvDialog.exec()
+       
+    def createCsvExportFile(self):
+        csvContent = []
+        csvHeader = ['Gruppe', 'Abteilung', 'Fach', 'Ort', 'Verantworlicher']
+        csvContent.append(csvHeader)
+        for item in self.items:
+            csvContent.append([
+                item.group,
+                item.department,
+                item.subject,
+                item.location,
+                item.responsiblePerson
+        ])
+        with open('information.csv', 'w', newline='') as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerows(csvContent)
+        self.showCSVMessage()
+            
 
