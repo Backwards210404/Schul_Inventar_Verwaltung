@@ -18,7 +18,7 @@ class AdminPage(Page):
         self.fHeaderButton = self.createButton('Logout', 850, 6)
 
     def createMainWidgets(self):
-        self.fTable = self.createTable(['Gruppe', 'Abteilung', 'Fach', 'Ort', 'Verantworlicher'],x = 0, y = 50)
+        self.fTable = self.createTable(['Vorname', 'Nachname', 'Nutzername', 'Rolle'],x = 0, y = 50)
         self.fHeader = self.createHeader(
         'Admin Seite',
         width = 1000,

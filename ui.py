@@ -18,7 +18,6 @@ class UI():
     def showLoginPage(self):
         self.fLoginPage.show()
         return
-        #TODO: Login Fehler einfügen
     def showAdminPage(self):
         self.fAdminPage.show()
     def hideAdminPage(self):

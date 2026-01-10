@@ -12,7 +12,6 @@ class Page(QMainWindow):
         self.show()
     def createButton(self, name:str, x = None, y = None):
         button = QPushButton(name, self)
-        button.click()
         if x != None and y != None:
             button.move(x, y)
         return button
