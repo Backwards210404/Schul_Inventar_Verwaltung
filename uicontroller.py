@@ -190,7 +190,7 @@ class UIController:
                 item.location,
                 item.responsiblePerson
         ])
-        with open('information.csv', 'w', newline='') as csvfile:
+        with open('export.csv', 'w', newline='') as csvfile:
             writer = csv.writer(csvfile)
             writer.writerows(csvContent)
         self.showCSVMessage()

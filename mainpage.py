@@ -20,7 +20,7 @@ class MainPage(Page):
         self.createMainWidgets()
     def createInputWidgets(self):
         self.fHeaderButton = self.createButton('Logout', 850, 6)
-        self.fExportButton = self.createButton('export in CSV', 250, 6)
+        self.fExportButton = self.createButton('Export in CSV', 250, 6)
         self.fAddItemButton = self.createButton('+', self.width - 80, self.height - 80)
         self.fAddItemButton.setFixedSize(60, 60)
 
