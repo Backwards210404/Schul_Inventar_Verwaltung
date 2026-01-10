@@ -25,6 +25,7 @@ class MainPage(Page):
     def createMainWidgets(self):
         distanceSidePanel = 200
         tableHeaders = ['Gruppe', 'Abteilung', 'Fach', 'Ort', 'Verantworlicher', 'Löschen']
+        filterHeaders = ['Gruppe', 'Abteilung', 'Fach', 'Ort', 'Verantworlicher', 'Zustand']
 
         self.fTable = self.createTable(tableHeaders ,x = distanceSidePanel, y = 50, width = 850)
         self.fTable.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
@@ -35,7 +36,7 @@ class MainPage(Page):
         )
 
         self.fSidePanel = self.createSidepanel()
-        filterWidget = self.createFilterWidget(tableHeaders)
+        filterWidget = self.createFilterWidget(filterHeaders)
         filterWidget.move(0, 200)
 
         # Buttons nach vorne bringen
@@ -43,14 +44,14 @@ class MainPage(Page):
         self.fAddItemButton.raise_()
         
 
-    def createFilterWidget(self, tableHeaders: list):
+    def createFilterWidget(self, filterHeaders: list):
         filterWidget = QWidget(self)
         vLayout = QVBoxLayout()
 
         filterLabel = self.createText('Suche Nach')
         filterLabel.setMinimumHeight(20)
 
-        self.fFilterDropDown = self.createDropDownMenu(tableHeaders)
+        self.fFilterDropDown = self.createDropDownMenu(filterHeaders)
         self.fFilterDropDown.setEditable(True)
         self.fFilterDropDown.lineEdit().setReadOnly(True)
         self.fFilterDropDown.lineEdit().setAlignment(Qt.AlignmentFlag.AlignHCenter)
