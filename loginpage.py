@@ -1,3 +1,5 @@
+from PyQt6.uic.properties import QtGui
+
 from page import Page
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import QColor, QPalette
@@ -17,6 +19,7 @@ class LoginPage(Page):
     def createInputWidgets(self):
         self.fUserName = self.createInput('Benutzername')
         self.fPassword = self.createInput('Passwort')
+        self.fPassword.setEchoMode(QLineEdit.EchoMode.Password)
         self.fLoginButton = self.createButton('Anmelden')
         self.fTitle = self.createTitle('Willkommen!')
 

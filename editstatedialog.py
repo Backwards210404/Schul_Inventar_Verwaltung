@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import Qt
-import ItemState
+from itemstate import ItemState, normalizeText
 from item import Item
 from user import User
 
@@ -23,14 +23,14 @@ class EditItemStateDialog(QDialog):
         self.fInfoLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.fStateDropDown = QComboBox()
-        states = [ItemState.ItemState.USED,
-                  ItemState.ItemState.FIXING,
-                  ItemState.ItemState.ORDERED,
-                  ItemState.ItemState.RETIRED,
-                  ItemState.ItemState.BORROWED,
-                  ItemState.ItemState.DELIVERED,
-                  ItemState.ItemState.PROJECTED,
-                  ItemState.ItemState.REQUESTED]
+        states = [ItemState.USED,
+                  ItemState.FIXING,
+                  ItemState.ORDERED,
+                  ItemState.RETIRED,
+                  ItemState.BORROWED,
+                  ItemState.DELIVERED,
+                  ItemState.PROJECTED,
+                  ItemState.REQUESTED]
 
         for s in states:
             self.fStateDropDown.addItem(s.value)
@@ -51,7 +51,7 @@ class EditItemStateDialog(QDialog):
         self.setLayout(layout)
 
     def onSave(self):
-        self.item.state = ItemState.normalizeText(self.fStateDropDown.currentData())
+        self.item.state = normalizeText(self.fStateDropDown.currentText())
         self.accept()
 
     def getItem(self) -> Item:

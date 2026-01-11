@@ -1,6 +1,5 @@
 from PyQt6.QtCore import Qt
-import ItemState
-from ItemState import normalizeText
+from itemstate import normalizeText, normalizeItems
 from adduserdialog import AddUserDialog
 from editresponsiblepersondialog import EditResponsiblePersonDialog
 from editstatedialog import EditItemStateDialog
@@ -33,9 +32,11 @@ class UIController:
         self.ui.showLoginPage()
         self.initLoginPageEvents()
         self.refreshUsers()
-        #self.createUsers()
+        self.createUsers()
 
     def createUsers(self):
+        if self.model.users.__len__() > 0:
+            return
         self.model.addUser(User('b', 'd', 'b', self.hashPassword('Hallo123#'), UserRole.RESPONSIBLE))
         self.model.addUser(User('b', 'd', 'teacher', self.hashPassword('Hallo123#'), UserRole.TEACHER))
         self.model.addUser(User('b', 'd', 'admin', self.hashPassword('Hallo123#'), UserRole.ADMIN))
@@ -47,7 +48,7 @@ class UIController:
 
     def refreshItems(self):
         self.model.load()
-        self.items = ItemState.normalizeItems(self.model.items)
+        self.items = normalizeItems(self.model.items)
 
     def refreshUsers(self):
         self.model.load()
@@ -102,23 +103,37 @@ class UIController:
         self.refreshItems()
         self.loadItemTableData()
         if self.user.getRole() == UserRole.RESPONSIBLE:
+            self.ui.fMainPage.fTable.setEnabled(True)
+            self.ui.fMainPage.fAddItemButton.setEnabled(True)
             self.ui.fMainPage.fTable.itemChanged.connect(self.onItemChanged)
             self.ui.fMainPage.fTable.itemClicked.connect(self.handleItemClick)
+            self.ui.fMainPage.fTable.setEditTriggers(QAbstractItemView.EditTrigger.DoubleClicked)
+
         else:
-            self.ui.fMainPage.fTable.itemChanged.connect(self.noClickEvent)
-            self.ui.fMainPage.fTable.itemClicked.connect(self.noClickEvent)
-            self.ui.fMainPage.fAddItemButton.clicked.disconnect(self.onAddItem)
+            self.ui.fMainPage.fTable.setEnabled(False)
+            self.ui.fMainPage.fAddItemButton.setEnabled(False)
+
     def noClickEvent(self):
         return
 
     def onAddItem(self):
-        dialog = AddItemDialog(self.users,self.ui.fMainPage)
-        if dialog.exec():
-            item = dialog.getItem()
-            if item:
-                self.model.addItem(item)
-                self.model.save()
-                self.addToTable(item)
+        if self._is_editing:
+            return
+
+        self._is_editing = True
+        try:
+            dialog = AddItemDialog(self.responsiblePersons, self.ui.fMainPage)
+            if dialog.exec():
+                item = dialog.getItem()
+                if item:
+                    self.model.addItem(item)
+                    self.model.save()
+                    if hasattr(self, 'items'):
+                        self.items.append(item)
+
+                    self.addToTable(item)
+        finally:
+            self._is_editing = False
 
     def addToTable(self, item):
         table = self.ui.fMainPage.fTable
@@ -231,20 +246,28 @@ class UIController:
     def handleItemClick(self, item):
         row = item.row()
         col = item.column()
-        text = item.text()
         selectedItem = self.items[row]
         if col == 5 or col == 4:
             self.openEditChangeDialog(item, selectedItem)
 
     def openEditUserRoleDialog(self, item):
-        if item.column() == 3:
-            row = item.row()
-            selected_user = self.users[row]
+        if self._is_editing:
+            return
 
-            dialog = EditUserRoleDialog(selected_user)
-            if dialog.exec():
-                item.setText(selected_user.role.value)
-                self.model.save()
+        if item.column() == 3:
+            self._is_editing = True
+            try:
+                row = item.row()
+                selected_user = self.users[row]
+
+                dialog = EditUserRoleDialog(selected_user)
+                if dialog.exec():
+                    role_text = selected_user.role.value if hasattr(selected_user.role, 'value') else str(
+                        selected_user.role)
+                    item.setText(role_text)
+                    self.model.save()
+            finally:
+                self._is_editing = False
     def openEditChangeDialog(self, item, selectedItem):
         if self._is_editing:
             return
@@ -291,8 +314,6 @@ class UIController:
             deleteButton.clicked.connect(lambda: self.removeItemRowAtButton(deleteButton, table))
         else:
             deleteButton.clicked.connect(lambda: self.removeUserRowAtButton(deleteButton, table))
-        if self.user.getRole() == UserRole.TEACHER:
-            deleteButton.clicked.disconnect()
 
         return deleteButton
     def removeItemRowAtButton(self, deleteButton, table):

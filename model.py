@@ -1,8 +1,7 @@
 import sqlite3
 from typing import List
 
-import ItemState
-from ItemState import normalizeItems
+from itemstate import normalizeItems
 from user import User
 from item import Item
 from userrole import normalizeUsers, UserRole
@@ -51,7 +50,7 @@ class Model:
             if self.items:
                 conn.executemany(
                     "INSERT INTO Items (GroupName, Department, Subject, Location, ResponsiblePerson, State) VALUES (?, ?, ?, ?, ?, ?)",
-                    ((i.group, i.department, i.subject, i.location, i.responsiblePerson.userName if isinstance(i.responsiblePerson, User) else i.responsiblePerson, i.state.value) for i in self.items)
+                    ((i.group, i.department, i.subject, i.location, i.responsiblePerson.userName if isinstance(i.responsiblePerson, User) else i.responsiblePerson, i.state.value if hasattr(i.state, 'value') else i.state) for i in self.items)
                 )
 
     def load(self) -> None:

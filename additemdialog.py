@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import *
 
-import ItemState
-from ItemState import normalizeText
+
+from itemstate import normalizeText, ItemState
 from item import Item
 from PyQt6.QtCore import Qt
 
@@ -61,12 +61,14 @@ class AddItemDialog(QDialog):
         return names
 
     def getItemStates(self):
-        return [ItemState.ItemState.USED,
-                ItemState.ItemState.FIXING,
-                ItemState.ItemState.ORDERED,
-                ItemState.ItemState.RETIRED, ItemState.ItemState.BORROWED,
-                ItemState.ItemState.DELIVERED, ItemState.ItemState.PROJECTED,
-                ItemState.ItemState.REQUESTED]
+        return [ItemState.USED,
+                ItemState.FIXING,
+                ItemState.ORDERED,
+                ItemState.RETIRED,
+                ItemState.BORROWED,
+                ItemState.DELIVERED,
+                ItemState.PROJECTED,
+                ItemState.REQUESTED]
     def createDropDownMenu(self, wordList: list):
         dropDownMenu = QComboBox(self)
 

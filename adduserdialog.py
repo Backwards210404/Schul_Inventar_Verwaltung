@@ -34,7 +34,7 @@ class AddUserDialog(QDialog):
 
         self.fPasswordInput = QLineEdit()
         self.fPasswordInput.setPlaceholderText('Passwort')
-        self.fPasswordInput.setEchoMode(QLineEdit.EchoMode.Password)  # Passwort verbergen
+        self.fPasswordInput.setEchoMode(QLineEdit.EchoMode.Password)
 
         self.fRoleDropDown = QComboBox()
         self.fRoleDropDown.addItems([UserRole.RESPONSIBLE.value,UserRole.ADMIN.value,UserRole.TEACHER.value])
