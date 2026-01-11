@@ -1,16 +1,22 @@
+from ItemState import ItemState
+from user import User
+
+
 class Item:
     group: str
     department: str
     subject: str
     location: str
-    responsiblePerson: str
+    responsiblePerson: User
+    state: ItemState
 
-    def __init__(self,group,department, subject, location, responsiblePerson): 
+    def __init__(self,group,department, subject, location, responsiblePerson, state):
         self.group = group
         self.department = department
         self.subject = subject
         self.location = location 
         self.responsiblePerson = responsiblePerson
+        self.state = state
         
     def getGroup(self): 
         return self.group

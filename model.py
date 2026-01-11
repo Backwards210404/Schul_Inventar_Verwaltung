@@ -1,7 +1,12 @@
 import sqlite3
 from typing import List
+
+import ItemState
+from ItemState import normalizeItems
 from user import User
 from item import Item
+from userrole import normalizeUsers, UserRole
+
 
 class Model:
     def __init__(self, db_path: str = "local.db"):
@@ -27,7 +32,8 @@ class Model:
             Department TEXT,
             Subject TEXT,
             Location TEXT,
-            ResponsiblePerson TEXT
+            ResponsiblePerson TEXT,
+            State TEXT
         )""")
         conn.commit()
 
@@ -38,14 +44,14 @@ class Model:
             if self.users:
                 conn.executemany(
                     "INSERT INTO Users (FirstName, LastName, UserName, Password, Role) VALUES (?, ?, ?, ?, ?)",
-                    ((u.firstName, u.lastName, u.userName, u.password, u.role) for u in self.users)
+                    ((u.firstName, u.lastName, u.userName, u.password, u.role.value if isinstance(u.role, UserRole) else u.role) for u in self.users)
                 )
 
             conn.execute("DELETE FROM Items")
             if self.items:
                 conn.executemany(
-                    "INSERT INTO Items (GroupName, Department, Subject, Location, ResponsiblePerson) VALUES (?, ?, ?, ?, ?)",
-                    ((i.group, i.department, i.subject, i.location, i.responsiblePerson) for i in self.items)
+                    "INSERT INTO Items (GroupName, Department, Subject, Location, ResponsiblePerson, State) VALUES (?, ?, ?, ?, ?, ?)",
+                    ((i.group, i.department, i.subject, i.location, i.responsiblePerson.userName if isinstance(i.responsiblePerson, User) else i.responsiblePerson, i.state.value) for i in self.items)
                 )
 
     def load(self) -> None:
@@ -53,7 +59,7 @@ class Model:
             self._ensure_tables(conn)
 
             cur = conn.execute("SELECT FirstName, LastName, UserName, Password, Role FROM Users ORDER BY Id")
-            self.users = [
+            self.users = normalizeUsers([
                 User(
                     firstName=row[0] or "",
                     lastName=row[1] or "",
@@ -62,13 +68,13 @@ class Model:
                     role=row[4] or ""
                 )
                 for row in cur.fetchall()
-            ]
+            ])
 
-            cur = conn.execute("SELECT GroupName, Department, Subject, Location, ResponsiblePerson FROM Items ORDER BY Id")
-            self.items = [
-                Item(group=row[0], department=row[1], subject=row[2], location=row[3], responsiblePerson=row[4])
+            cur = conn.execute("SELECT GroupName, Department, Subject, Location, ResponsiblePerson, State FROM Items ORDER BY Id")
+            self.items = normalizeItems([
+                Item(group=row[0], department=row[1], subject=row[2], location=row[3], responsiblePerson=row[4], state=row[5] )
                 for row in cur.fetchall()
-            ]
+            ])
 
 
     def addUser(self, user: User) -> None:

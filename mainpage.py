@@ -24,7 +24,7 @@ class MainPage(Page):
 
     def createMainWidgets(self):
         distanceSidePanel = 200
-        tableHeaders = ['Gruppe', 'Abteilung', 'Fach', 'Ort', 'Verantworlicher', 'Löschen']
+        tableHeaders = ['Gruppe', 'Abteilung', 'Fach', 'Ort', 'Verantworlicher', 'Zustand', 'Löschen']
         filterHeaders = ['Gruppe', 'Abteilung', 'Fach', 'Ort', 'Verantworlicher', 'Zustand']
 
         self.fTable = self.createTable(tableHeaders ,x = distanceSidePanel, y = 50, width = 850)
@@ -39,7 +39,6 @@ class MainPage(Page):
         filterWidget = self.createFilterWidget(filterHeaders)
         filterWidget.move(0, 200)
 
-        # Buttons nach vorne bringen
         self.fHeaderButton.raise_()
         self.fAddItemButton.raise_()
         

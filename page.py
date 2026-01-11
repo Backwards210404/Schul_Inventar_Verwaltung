@@ -12,7 +12,7 @@ class Page(QMainWindow):
         self.show()
     def createButton(self, name:str, x = None, y = None):
         button = QPushButton(name, self)
-        if x != None and y != None:
+        if x is not None and y is not None:
             button.move(x, y)
         return button
     def createDropDownMenu(self, wordList: list):
@@ -23,13 +23,13 @@ class Page(QMainWindow):
     def createInput(self, placeHolderName:str, x = None, y = None):
         input = QLineEdit(self)
         input.setPlaceholderText(placeHolderName)
-        if x != None and y != None:
+        if x is not None and y is not None:
             input.move(x, y)
         return input
     def createText(self, name:str,x = None, y = None):
         label = QLabel(name)
         label.setAlignment(Qt.AlignmentFlag.AlignHCenter)
-        if x != None and y != None:
+        if x is not None and y is not None:
             label.move(x, y)
 
         return label
@@ -41,7 +41,7 @@ class Page(QMainWindow):
         layout.addWidget(headerTitle)
         headerWidget.setFixedSize(width, 50) # Jeder der die Zahlen hier verändert ist eine Entäuschung
         headerWidget.setLayout(layout)
-        if x != None and y != None:
+        if x is not None and y is not None:
             headerWidget.move(x, y)
 
         return headerWidget
@@ -56,21 +56,21 @@ class Page(QMainWindow):
     def createTitle(self, name:str,x = None, y = None):
         label = QLabel('<h1>' + name + '</h1>')
         label.setAlignment(Qt.AlignmentFlag.AlignHCenter)
-        if x != None and y != None:
+        if x is not None and y is not None:
             label.move(x, y)
 
         return label
     def createTable(self, tableHeaders: list, x = None, y = None, width = None):
         table = QTableWidget(self)
         table.setColumnCount(len(tableHeaders))
-        if (width != None):
+        if width is not None:
             table.setFixedSize(width,550)
         else:
             table.setFixedSize(1000,550)
         table.resizeColumnToContents(len(tableHeaders))
         table.setHorizontalHeaderLabels(tableHeaders)
         table.horizontalHeader().setStyleSheet("QHeaderView::section { border: 1px solid gray; }")
-        if x != None and y != None:
+        if x is not None and y is not None:
             table.move(x, y)
 
 

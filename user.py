@@ -1,9 +1,12 @@
+from userrole import UserRole
+
+
 class User:
     firstName: str
     lastName: str
     userName: str
     password: str
-    role: str
+    role: UserRole
 
     def __init__(self,firstName, lastName, userName, password, role):
         self.firstName = firstName
