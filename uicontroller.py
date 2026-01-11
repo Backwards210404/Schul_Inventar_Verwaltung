@@ -12,6 +12,7 @@ from user import User
 from additemdialog import AddItemDialog
 from PyQt6.QtWidgets import *
 import hashlib
+import csv
 
 from userrole import UserRole
 
@@ -32,7 +33,6 @@ class UIController:
         self.ui.showLoginPage()
         self.initLoginPageEvents()
         self.refreshUsers()
-        self.alreadyRefreshed = False
         #self.createUsers()
 
     def createUsers(self):
@@ -98,6 +98,7 @@ class UIController:
         self.ui.fMainPage.fAddItemButton.clicked.connect(self.onAddItem)
         self.ui.fMainPage.fFilterButton.clicked.connect(self.onSearchInItemTable)
         self.ui.fMainPage.fHeaderButton.clicked.connect(self.onLogout)
+        self.ui.fMainPage.fExportButton.clicked.connect(self.createCsvExportFile)
         self.refreshItems()
         self.loadItemTableData()
         if self.user.getRole() == UserRole.RESPONSIBLE:
@@ -355,4 +356,30 @@ class UIController:
         self.ui.fLoginPage.fUserName.clear()
         self.ui.fLoginPage.fPassword.clear()
         self.ui.showLoginPage()
+
+    def showCSVMessage(self):
+        csvDialog = QMessageBox(self.ui.fAdminPage)
+        csvDialog.setIcon(QMessageBox.Icon.Information)
+        csvDialog.setWindowTitle('Tabelle exportiert')
+        csvDialog.setText('Die Tabelle wurde in einer CSV Datei exportiert!')
+        csvDialog.setStandardButtons(QMessageBox.StandardButton.Ok)
+        csvDialog.exec()
+
+    def createCsvExportFile(self):
+        csvContent = []
+        csvHeader = ['Gruppe', 'Abteilung', 'Fach', 'Ort', 'Verantworlicher']
+        csvContent.append(csvHeader)
+        for item in self.items:
+            csvContent.append([
+                item.group,
+                item.department,
+                item.subject,
+                item.location,
+                item.responsiblePerson
+        ])
+        with open('export.csv', 'w', newline='') as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerows(csvContent)
+        self.showCSVMessage()
+
 
