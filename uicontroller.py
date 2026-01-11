@@ -31,8 +31,8 @@ class UIController:
         self.model = Model()
         self.ui.showLoginPage()
         self.initLoginPageEvents()
-        self.refreshUsers()
         self.createUsers()
+        self.refreshUsers()
 
     def createUsers(self):
         if self.model.users.__len__() > 0:
