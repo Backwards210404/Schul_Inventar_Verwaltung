@@ -388,7 +388,7 @@ class UIController:
 
     def createCsvExportFile(self):
         csvContent = []
-        csvHeader = ['Gruppe', 'Abteilung', 'Fach', 'Ort', 'Verantworlicher']
+        csvHeader = ['Gruppe', 'Abteilung', 'Fach', 'Ort', 'Verantworlicher', 'Zustand']
         csvContent.append(csvHeader)
         for item in self.items:
             csvContent.append([
@@ -396,7 +396,8 @@ class UIController:
                 item.department,
                 item.subject,
                 item.location,
-                item.responsiblePerson
+                item.responsiblePerson,
+                item.state
         ])
         with open('export.csv', 'w', newline='') as csvfile:
             writer = csv.writer(csvfile)
