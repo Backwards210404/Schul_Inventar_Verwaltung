@@ -2,6 +2,9 @@ from page import Page
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import Qt
 
+from userrole import UserRole
+
+
 class MainPage(Page):
     fTitle: QLabel
     fHeader: QFrame
@@ -16,6 +19,8 @@ class MainPage(Page):
     fStateDropDown: QComboBox
     fTypePersonDropDown: QComboBox
     fFilterWidget = QWidget
+    tableHeaders = ['Gruppe', 'Abteilung', 'Fach', 'Ort', 'Verantworlicher', 'Zustand', 'Löschen']
+    filterHeaders = ['Gruppe', 'Abteilung', 'Fach', 'Ort', 'Verantworlicher', 'Zustand']
     def __init__(self):
         super().__init__()
         self.setWindowTitle('Main')
@@ -29,12 +34,11 @@ class MainPage(Page):
 
     def createMainWidgets(self):
         distanceSidePanel = 200
-        tableHeaders = ['Gruppe', 'Abteilung', 'Fach', 'Ort', 'Verantworlicher', 'Zustand', 'Löschen']
-        filterHeaders = ['Gruppe', 'Abteilung', 'Fach', 'Ort', 'Verantworlicher', 'Zustand']
+
         personTypeList = ['Schüler', 'Lehrer', 'Admin']
         stateList = ['Gebraucht', 'In Reparatur', 'Bestellt', 'Ausgemustert', 'Verliehen', 'Geliefert', 'Geplant', 'Angefordert']
 
-        self.fTable = self.createTable(tableHeaders ,x = distanceSidePanel, y = 50, width = 850)
+        self.fTable = self.createTable(self.tableHeaders ,x = distanceSidePanel, y = 50, width = 850)
         self.fTable.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         self.fHeader = self.createHeader(
         'Inventutator 2000 Pro Max Ultra Power Edition',
@@ -43,7 +47,7 @@ class MainPage(Page):
         )
 
         self.fSidePanel = self.createSidepanel()
-        filterWidget = self.createFilterWidget(filterHeaders, personTypeList,  stateList, True)
+        filterWidget = self.createFilterWidget(self.filterHeaders, personTypeList,  stateList, True)
         filterWidget.move(0, 200)
         self.fFilterDropDown.currentIndexChanged.connect(self.filterIndexChanged)
 
@@ -58,28 +62,29 @@ class MainPage(Page):
 
         filterLabel = self.createText('Suche Nach')
         filterLabel.setMinimumHeight(20)
-        if(isFirstTime):
-            self.fFilterDropDown = self.createDropDownMenu(filterHeaders)
-            self.fFilterDropDown.setEditable(True)
-            self.fFilterDropDown.lineEdit().setReadOnly(True)
-            self.fFilterDropDown.lineEdit().setAlignment(Qt.AlignmentFlag.AlignHCenter)
-            self.fFilterDropDown.setMinimumHeight(22)
+        filterSelected = ""
+        if not isFirstTime:
+            filterSelected = self.fFilterDropDown.currentText()
+        self.fFilterDropDown = self.createDropDownMenu(filterHeaders)
+        self.fFilterDropDown.setEditable(True)
+        self.fFilterDropDown.lineEdit().setReadOnly(True)
+        self.fFilterDropDown.lineEdit().setAlignment(Qt.AlignmentFlag.AlignHCenter)
+        self.fFilterDropDown.setMinimumHeight(22)
 
         self.fFilterButton = self.createButton('Suchen')
         self.fFilterButton.setMinimumHeight(22)
-        filterSelected = self.fFilterDropDown.currentText()
 
 
         vLayout.addWidget(filterLabel)
         vLayout.addWidget(self.fFilterDropDown)
-        if (filterSelected == 'Verantworlicher'):
+        if not isFirstTime and filterSelected == UserRole.RESPONSIBLE:
             self.fTypePersonDropDown = self.createDropDownMenu(personTypeList)
             self.fTypePersonDropDown.setEditable(True)
             self.fTypePersonDropDown.lineEdit().setReadOnly(True)
             self.fTypePersonDropDown.lineEdit().setAlignment(Qt.AlignmentFlag.AlignHCenter)
             self.fTypePersonDropDown.setMinimumHeight(22)
             vLayout.addWidget(self.fTypePersonDropDown)
-        elif (filterSelected == 'Zustand'):
+        elif not isFirstTime and filterSelected == 'Zustand':
             self.fStateDropDown = self.createDropDownMenu(stateList)
             self.fStateDropDown.setEditable(True)
             self.fStateDropDown.lineEdit().setReadOnly(True)
@@ -101,10 +106,11 @@ class MainPage(Page):
 
         return filterWidget
     def filterIndexChanged(self):
-        filterHeaders = ['Gruppe', 'Abteilung', 'Fach', 'Ort', 'Verantworlicher', 'Zustand']
-        personTypeList = ['Schüler', 'Lehrer', 'Admin']
+        personTypeList = [UserRole.RESPONSIBLE, UserRole.TEACHER, UserRole.ADMIN]
         stateList = ['Gebraucht', 'In Reparatur', 'Bestellt', 'Ausgemustert', 'Verliehen', 'Geliefert', 'Geplant', 'Angefordert']
-        self.fFilterWidget = self.createFilterWidget(filterHeaders, personTypeList,  stateList, False)
+        #ItemState enum benutzen
+
+        self.fFilterWidget = self.createFilterWidget(self.filterHeaders, personTypeList,  stateList, False)
 
     def styleSheet(self):
         self.fSidePanel.setStyleSheet('background: Gainsboro')
