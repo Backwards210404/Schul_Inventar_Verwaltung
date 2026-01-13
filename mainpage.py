@@ -19,23 +19,23 @@ class MainPage(Page):
     fStateDropDown: QComboBox
     fTypePersonDropDown: QComboBox
     fFilterWidget = QWidget
-    tableHeaders = ['Gruppe', 'Abteilung', 'Fach', 'Ort', 'Verantworlicher', 'Zustand', 'Löschen']
-    filterHeaders = ['Gruppe', 'Abteilung', 'Fach', 'Ort', 'Verantworlicher', 'Zustand']
+    fVLayout = QVBoxLayout
+    tableHeaders = ['Gruppe', 'Abteilung', 'Fach', 'Ort', UserRole.RESPONSIBLE.value, 'Zustand', 'Löschen']
+    filterHeaders = ['Gruppe', 'Abteilung', 'Fach', 'Ort', UserRole.RESPONSIBLE.value, 'Zustand']
     def __init__(self):
         super().__init__()
         self.setWindowTitle('Main')
-        self.createInputWidgets()
-        self.createMainWidgets()
     def createInputWidgets(self):
         self.fHeaderButton = self.createButton('Logout', 850, 6)
         self.fExportButton = self.createButton('Export in CSV', 250, 6)
         self.fAddItemButton = self.createButton('+', self.width - 80, self.height - 80)
         self.fAddItemButton.setFixedSize(60, 60)
-
     def createMainWidgets(self):
+        self.fVLayout = QVBoxLayout()
         distanceSidePanel = 200
 
         personTypeList = ['Schüler', 'Lehrer', 'Admin']
+
         stateList = ['Gebraucht', 'In Reparatur', 'Bestellt', 'Ausgemustert', 'Verliehen', 'Geliefert', 'Geplant', 'Angefordert']
 
         self.fTable = self.createTable(self.tableHeaders ,x = distanceSidePanel, y = 50, width = 850)
@@ -47,8 +47,8 @@ class MainPage(Page):
         )
 
         self.fSidePanel = self.createSidepanel()
-        filterWidget = self.createFilterWidget(self.filterHeaders, personTypeList,  stateList, True)
-        filterWidget.move(0, 200)
+        self.fFilterWidget = self.createDropDownFilterWidget(self.filterHeaders, personTypeList,  stateList, True)
+        self.fFilterWidget.move(0, 200)
         self.fFilterDropDown.currentIndexChanged.connect(self.filterIndexChanged)
 
         self.fHeaderButton.raise_()
@@ -56,61 +56,50 @@ class MainPage(Page):
         self.fAddItemButton.raise_()
         
 
-    def createFilterWidget(self, filterHeaders: list, personTypeList: list, stateList: list, isFirstTime: bool):
+    def createDropDownFilterWidget(self, filterHeaders: list, personTypeList: list, stateList: list, isFirstTime: bool):
         filterWidget = QWidget(self)
-        vLayout = QVBoxLayout()
 
-        filterLabel = self.createText('Suche Nach')
+        filterLabel = self.createText('Suche:')
         filterLabel.setMinimumHeight(20)
         filterSelected = ""
         if not isFirstTime:
             filterSelected = self.fFilterDropDown.currentText()
         self.fFilterDropDown = self.createDropDownMenu(filterHeaders)
-        self.fFilterDropDown.setEditable(True)
-        self.fFilterDropDown.lineEdit().setReadOnly(True)
-        self.fFilterDropDown.lineEdit().setAlignment(Qt.AlignmentFlag.AlignHCenter)
-        self.fFilterDropDown.setMinimumHeight(22)
-
         self.fFilterButton = self.createButton('Suchen')
         self.fFilterButton.setMinimumHeight(22)
+        
 
+        self.fVLayout.addWidget(filterLabel)
+        self.fVLayout.addWidget(self.fFilterDropDown)
 
-        vLayout.addWidget(filterLabel)
-        vLayout.addWidget(self.fFilterDropDown)
-        if not isFirstTime and filterSelected == UserRole.RESPONSIBLE:
-            self.fTypePersonDropDown = self.createDropDownMenu(personTypeList)
-            self.fTypePersonDropDown.setEditable(True)
-            self.fTypePersonDropDown.lineEdit().setReadOnly(True)
-            self.fTypePersonDropDown.lineEdit().setAlignment(Qt.AlignmentFlag.AlignHCenter)
-            self.fTypePersonDropDown.setMinimumHeight(22)
-            vLayout.addWidget(self.fTypePersonDropDown)
-        elif not isFirstTime and filterSelected == 'Zustand':
-            self.fStateDropDown = self.createDropDownMenu(stateList)
-            self.fStateDropDown.setEditable(True)
-            self.fStateDropDown.lineEdit().setReadOnly(True)
-            self.fStateDropDown.lineEdit().setAlignment(Qt.AlignmentFlag.AlignHCenter)
-            self.fStateDropDown.setMinimumHeight(22)
-            vLayout.addWidget(self.fStateDropDown)
-        else:
-            self.fFilterInput = self.createInput('Bitte gib das Wort hier ein')
-            self.fFilterInput.setAlignment(Qt.AlignmentFlag.AlignHCenter)
-            self.fFilterInput.setMinimumHeight(20)
-            vLayout.addWidget(self.fFilterInput)
-        vLayout.addWidget(self.fFilterInput)
-        vLayout.addWidget(self.fFilterButton)
-        vLayout.setContentsMargins(0,0,0,0)
-        vLayout.setSpacing(5)
+        self.fVLayout.addWidget(self.fFilterButton)
+        self.fVLayout.setContentsMargins(0,0,0,0)
+        self.fVLayout.setSpacing(5)
 
-        filterWidget.setLayout(vLayout)
+        filterWidget.setLayout(self.fVLayout)
         filterWidget.setFixedSize(200,100)
 
         return filterWidget
+    def createInputOrDropdown(self, filterSelected, personTypeList, stateList):
+        if filterSelected == UserRole.RESPONSIBLE.value:
+            self.fTypePersonDropDown = self.createDropDownMenu(personTypeList)
+            self.fVLayout.addWidget(self.fTypePersonDropDown)
+        elif filterSelected == 'Zustand':
+            self.fStateDropDown = self.createDropDownMenu(stateList)
+            self.fVLayout.addWidget(self.fStateDropDown)
+        else:
+            self.fFilterInput = self.createInput('Hier eingeben')
+            self.fFilterInput.setAlignment(Qt.AlignmentFlag.AlignHCenter)
+            self.fFilterInput.setMinimumHeight(20)
+            self.fVLayout.addWidget(self.fFilterInput)
     def filterIndexChanged(self):
-        personTypeList = [UserRole.RESPONSIBLE, UserRole.TEACHER, UserRole.ADMIN]
+        personTypeList = [UserRole.RESPONSIBLE.value, UserRole.TEACHER.value, UserRole.ADMIN.value]
         stateList = ['Gebraucht', 'In Reparatur', 'Bestellt', 'Ausgemustert', 'Verliehen', 'Geliefert', 'Geplant', 'Angefordert']
         #ItemState enum benutzen
-
-        self.fFilterWidget = self.createFilterWidget(self.filterHeaders, personTypeList,  stateList, False)
+        self.fFilterWidget = self.createDropDownFilterWidget(self.filterHeaders, personTypeList,  stateList, False)
+        self.fFilterWidget.move(0, 200)
+        self.fFilterWidget.show()
+        self.fFilterDropDown.currentIndexChanged.connect(self.filterIndexChanged)
 
     def styleSheet(self):
         self.fSidePanel.setStyleSheet('background: Gainsboro')

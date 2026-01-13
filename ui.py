@@ -15,19 +15,16 @@ class UI():
         self.fAdminPage = AdminPage()
 
 
-    def showLoginPage(self):
-        self.fLoginPage.show()
-        return
     def showAdminPage(self):
-        self.fAdminPage.show()
+        self.fAdminPage.showPage()
     def hideAdminPage(self):
         self.fAdminPage.hide()
     def showInventoryPage(self):
-        self.fMainPage.show()
+        self.fMainPage.showPage()
     def hideInventoryPage(self):
         self.fMainPage.hide()
     def hideLoginPage(self):
         self.fLoginPage.hide()
     def showLoginPage(self):
-        self.fLoginPage.show()
+        self.fLoginPage.showPage()
 

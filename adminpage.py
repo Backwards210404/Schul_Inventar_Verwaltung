@@ -13,8 +13,6 @@ class AdminPage(Page):
     def __init__(self):
         super().__init__()
         self.setWindowTitle('Admin')
-        self.createMainWidgets()
-        self.createInputWidgets()
         self.styleSheet()
     def createInputWidgets(self):
         self.fHeaderButton = self.createButton('Logout', 850, 6)

@@ -22,6 +22,8 @@ class LoginPage(Page):
         self.fPassword.setEchoMode(QLineEdit.EchoMode.Password)
         self.fLoginButton = self.createButton('Anmelden')
         self.fTitle = self.createTitle('Willkommen!')
+    def showPage(self):
+        self.show()
 
     def createLayoutWithWidgets(self):
         centralWidget = QWidget()

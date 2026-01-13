@@ -9,7 +9,13 @@ class Page(QMainWindow):
         self.height = 600
         self.setFixedSize(self.width, self.height)
     def showPage(self):
+        self.createInputWidgets()
+        self.createMainWidgets()
         self.show()
+    def createInputWidgets(self):
+        pass
+    def createMainWidgets(self):
+        pass
     def createButton(self, name:str, x = None, y = None):
         button = QPushButton(name, self)
         if x is not None and y is not None:
@@ -18,6 +24,10 @@ class Page(QMainWindow):
     def createDropDownMenu(self, wordList: list):
         dropDownMenu = QComboBox(self)
         dropDownMenu.addItems(wordList)
+        dropDownMenu.setEditable(True)
+        dropDownMenu.lineEdit().setReadOnly(True)
+        dropDownMenu.lineEdit().setAlignment(Qt.AlignmentFlag.AlignHCenter)
+        dropDownMenu.setMinimumHeight(22)
 
         return dropDownMenu
     def createInput(self, placeHolderName:str, x = None, y = None):
