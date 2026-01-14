@@ -2,7 +2,7 @@ from page import Page
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import Qt
 
-from userrole import UserRole
+from itemname import ItemName
 
 
 class MainPage(Page):
@@ -20,8 +20,8 @@ class MainPage(Page):
     fTypePersonDropDown: QComboBox
     fFilterWidget = QWidget
     fVLayout = QVBoxLayout
-    tableHeaders = ['Gruppe', 'Abteilung', 'Fach', 'Ort', UserRole.RESPONSIBLE.value, 'Zustand', 'Löschen']
-    filterHeaders = ['Gruppe', 'Abteilung', 'Fach', 'Ort', UserRole.RESPONSIBLE.value, 'Zustand']
+    tableHeaders = [ItemName.GROUP.value, ItemName.DEPARTMENT.value, ItemName.SUBJECT.value, ItemName.LOCATION.value, ItemName.RESPONSIBLE.value, ItemName.STATE.value, 'Löschen']
+    filterHeaders = [ItemName.GROUP.value, ItemName.DEPARTMENT.value, ItemName.SUBJECT.value, ItemName.LOCATION.value, ItemName.RESPONSIBLE.value, ItemName.STATE.value, 'Zustand']
     def __init__(self):
         super().__init__()
         self.setWindowTitle('Main')
@@ -81,10 +81,10 @@ class MainPage(Page):
 
         return filterWidget
     def createInputOrDropdown(self, filterSelected, personTypeList, stateList):
-        if filterSelected == UserRole.RESPONSIBLE.value:
+        if filterSelected == ItemName.RESPONSIBLE.value:
             self.fTypePersonDropDown = self.createDropDownMenu(personTypeList)
             self.fVLayout.addWidget(self.fTypePersonDropDown)
-        elif filterSelected == 'Zustand':
+        elif filterSelected == ItemName.STATE.value:
             self.fStateDropDown = self.createDropDownMenu(stateList)
             self.fVLayout.addWidget(self.fStateDropDown)
         else:
@@ -93,10 +93,11 @@ class MainPage(Page):
             self.fFilterInput.setMinimumHeight(20)
             self.fVLayout.addWidget(self.fFilterInput)
     def filterIndexChanged(self):
-        personTypeList = [UserRole.RESPONSIBLE.value, UserRole.TEACHER.value, UserRole.ADMIN.value]
+        self.
+        allResponsibles = [UserRole.RESPONSIBLE.value, UserRole.TEACHER.value, UserRole.ADMIN.value]
         stateList = ['Gebraucht', 'In Reparatur', 'Bestellt', 'Ausgemustert', 'Verliehen', 'Geliefert', 'Geplant', 'Angefordert']
         #ItemState enum benutzen
-        self.fFilterWidget = self.createDropDownFilterWidget(self.filterHeaders, personTypeList,  stateList, False)
+        self.fFilterWidget = self.createDropDownFilterWidget(self.filterHeaders, allResponsibles,  stateList, False)
         self.fFilterWidget.move(0, 200)
         self.fFilterWidget.show()
         self.fFilterDropDown.currentIndexChanged.connect(self.filterIndexChanged)
