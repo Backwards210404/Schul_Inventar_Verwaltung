@@ -1,6 +1,6 @@
 from enum import Enum
 
-class ItemName(Enum):
+class ItemHeader(Enum):
     GROUP = "Gruppe"
     DEPARTMENT = "Abteilung"
     SUBJECT = "Fach"

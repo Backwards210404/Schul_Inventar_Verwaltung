@@ -2,8 +2,8 @@ from page import Page
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import Qt
 
-from itemname import ItemName
-
+from itemheader import ItemHeader
+from model import Model
 
 class MainPage(Page):
     fTitle: QLabel
@@ -17,11 +17,12 @@ class MainPage(Page):
     fFilterInput: QLineEdit
     fFilterButton: QPushButton
     fStateDropDown: QComboBox
-    fTypePersonDropDown: QComboBox
+    fResponsiblePersonDropDown: QComboBox
     fFilterWidget = QWidget
     fVLayout = QVBoxLayout
-    tableHeaders = [ItemName.GROUP.value, ItemName.DEPARTMENT.value, ItemName.SUBJECT.value, ItemName.LOCATION.value, ItemName.RESPONSIBLE.value, ItemName.STATE.value, 'Löschen']
-    filterHeaders = [ItemName.GROUP.value, ItemName.DEPARTMENT.value, ItemName.SUBJECT.value, ItemName.LOCATION.value, ItemName.RESPONSIBLE.value, ItemName.STATE.value, 'Zustand']
+    fFilterSelected = ''
+    tableHeaders = [ItemHeader.GROUP.value, ItemHeader.DEPARTMENT.value, ItemHeader.SUBJECT.value, ItemHeader.LOCATION.value, ItemHeader.RESPONSIBLE.value, ItemHeader.STATE.value, 'Löschen']
+    filterHeaders = [ItemHeader.GROUP.value, ItemHeader.DEPARTMENT.value, ItemHeader.SUBJECT.value, ItemHeader.LOCATION.value, ItemHeader.RESPONSIBLE.value, ItemHeader.STATE.value]
     def __init__(self):
         super().__init__()
         self.setWindowTitle('Main')
@@ -61,9 +62,6 @@ class MainPage(Page):
 
         filterLabel = self.createText('Suche:')
         filterLabel.setMinimumHeight(20)
-        filterSelected = ""
-        if not isFirstTime:
-            filterSelected = self.fFilterDropDown.currentText()
         self.fFilterDropDown = self.createDropDownMenu(filterHeaders)
         self.fFilterButton = self.createButton('Suchen')
         self.fFilterButton.setMinimumHeight(22)
@@ -80,20 +78,9 @@ class MainPage(Page):
         filterWidget.setFixedSize(200,100)
 
         return filterWidget
-    def createInputOrDropdown(self, filterSelected, personTypeList, stateList):
-        if filterSelected == ItemName.RESPONSIBLE.value:
-            self.fTypePersonDropDown = self.createDropDownMenu(personTypeList)
-            self.fVLayout.addWidget(self.fTypePersonDropDown)
-        elif filterSelected == ItemName.STATE.value:
-            self.fStateDropDown = self.createDropDownMenu(stateList)
-            self.fVLayout.addWidget(self.fStateDropDown)
-        else:
-            self.fFilterInput = self.createInput('Hier eingeben')
-            self.fFilterInput.setAlignment(Qt.AlignmentFlag.AlignHCenter)
-            self.fFilterInput.setMinimumHeight(20)
-            self.fVLayout.addWidget(self.fFilterInput)
     def filterIndexChanged(self):
-        self.
+        model = Model()
+        model.load()
         allResponsibles = [UserRole.RESPONSIBLE.value, UserRole.TEACHER.value, UserRole.ADMIN.value]
         stateList = ['Gebraucht', 'In Reparatur', 'Bestellt', 'Ausgemustert', 'Verliehen', 'Geliefert', 'Geplant', 'Angefordert']
         #ItemState enum benutzen

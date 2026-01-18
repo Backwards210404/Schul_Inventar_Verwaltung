@@ -5,6 +5,7 @@ from editresponsiblepersondialog import EditResponsiblePersonDialog
 from editstatedialog import EditItemStateDialog
 from edituserroledialog import EditUserRoleDialog
 from item import Item
+from itemheader import ItemHeader
 from model import Model
 from ui import UI
 from user import User
@@ -268,6 +269,30 @@ class UIController:
                     self.model.save()
             finally:
                 self._is_editing = False
+    def getAllResponsibiltityUserNames(self):
+        self.model.load()
+        users = self.model.users
+        responsibilityUserNames = []
+        for user in users:
+            if user.role == UserRole.RESPONSIBLE.value:
+                responsibilityUserNames.append(user.userName)
+        return responsibilityUserNames
+    def showOrHideForMainPage(self):
+        if self.ui.fMainPage.filterSelected == ItemHeader.RESPONSIBLE.value:
+            self.ui.fMainPage.fResponsiblePersonDropDown.show()
+
+            self.ui.fMainPage.fFilterInput.hide()
+            self.ui.fMainPage.fResponsiblePersonDropDown.hide()
+        elif self.ui.fMainPage.filterSelected == ItemHeader.STATE.value:
+            self.ui.fMainPage.fStateDropDown.show()
+
+            self.ui.fMainPage.fFilterInput.hide()
+            self.ui.fMainPage.fResponsiblePersonDropDown.hide()
+        else:
+            self.ui.fMainPage.fFilterInput.show()
+
+            self.ui.fMainPage.fStateDropDown.hide()
+            self.ui.fMainPage.fResponsiblePersonDropDown.hide()
     def openEditChangeDialog(self, item, selectedItem):
         if self._is_editing:
             return
