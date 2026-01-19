@@ -97,8 +97,11 @@ class UIController:
         self.ui.fAdminPage.fTable.itemClicked.connect(self.openEditUserRoleDialog)
 
     def initInventoryPageEvents(self):
+        self.selectInputForMainPage()
+        self.ui.fMainPage.fFilterDropDown.currentIndexChanged.connect(self.selectInputForMainPage)
+        #self.ui.fMainPage.fFilterButton.clicked.connect(self.)
         self.ui.fMainPage.fAddItemButton.clicked.connect(self.onAddItem)
-        self.ui.fMainPage.fFilterButton.clicked.connect(self.onSearchInItemTable)
+        self.ui.fMainPage.fFilterSearchButton.clicked.connect(self.onSearchInItemTable)
         self.ui.fMainPage.fHeaderButton.clicked.connect(self.onLogout)
         self.ui.fMainPage.fExportButton.clicked.connect(self.createCsvExportFile)
         self.refreshItems()
@@ -269,21 +272,13 @@ class UIController:
                     self.model.save()
             finally:
                 self._is_editing = False
-    def getAllResponsibiltityUserNames(self):
-        self.model.load()
-        users = self.model.users
-        responsibilityUserNames = []
-        for user in users:
-            if user.role == UserRole.RESPONSIBLE.value:
-                responsibilityUserNames.append(user.userName)
-        return responsibilityUserNames
-    def showOrHideForMainPage(self):
-        if self.ui.fMainPage.filterSelected == ItemHeader.RESPONSIBLE.value:
+    def selectInputForMainPage(self):
+        if self.ui.fMainPage.fFilterDropDown.currentText() == ItemHeader.RESPONSIBLE.value:
             self.ui.fMainPage.fResponsiblePersonDropDown.show()
 
             self.ui.fMainPage.fFilterInput.hide()
-            self.ui.fMainPage.fResponsiblePersonDropDown.hide()
-        elif self.ui.fMainPage.filterSelected == ItemHeader.STATE.value:
+            self.ui.fMainPage.fStateDropDown.hide()
+        elif self.ui.fMainPage.fFilterDropDown.currentText() == ItemHeader.STATE.value:
             self.ui.fMainPage.fStateDropDown.show()
 
             self.ui.fMainPage.fFilterInput.hide()

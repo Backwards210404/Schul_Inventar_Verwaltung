@@ -4,6 +4,7 @@ from PyQt6.QtCore import Qt
 
 from itemheader import ItemHeader
 from model import Model
+from userrole import UserRole
 
 class MainPage(Page):
     fTitle: QLabel
@@ -15,7 +16,7 @@ class MainPage(Page):
     fAddItemButton: QPushButton
     fFilterDropDown: QComboBox
     fFilterInput: QLineEdit
-    fFilterButton: QPushButton
+    fFilterSearchButton: QPushButton
     fStateDropDown: QComboBox
     fResponsiblePersonDropDown: QComboBox
     fFilterWidget = QWidget
@@ -50,7 +51,6 @@ class MainPage(Page):
         self.fSidePanel = self.createSidepanel()
         self.fFilterWidget = self.createDropDownFilterWidget(self.filterHeaders, personTypeList,  stateList, True)
         self.fFilterWidget.move(0, 200)
-        self.fFilterDropDown.currentIndexChanged.connect(self.filterIndexChanged)
 
         self.fHeaderButton.raise_()
         self.fExportButton.raise_()
@@ -63,14 +63,22 @@ class MainPage(Page):
         filterLabel = self.createText('Suche:')
         filterLabel.setMinimumHeight(20)
         self.fFilterDropDown = self.createDropDownMenu(filterHeaders)
-        self.fFilterButton = self.createButton('Suchen')
-        self.fFilterButton.setMinimumHeight(22)
-        
+        self.fFilterSearchButton = self.createButton('Suchen')
+        self.fFilterSearchButton.setMinimumHeight(22)
+
+        stateList = ['Gebraucht', 'In Reparatur', 'Bestellt', 'Ausgemustert', 'Verliehen', 'Geliefert', 'Geplant', 'Angefordert']
+        self.fStateDropDown = self.createDropDownMenu(stateList)
+        self.fFilterInput = self.createInput('Hier eingeben.')
+        allResponsibles = self.getAllResponsibiltityUserNames()
+        self.fResponsiblePersonDropDown = self.createDropDownMenu(allResponsibles)
 
         self.fVLayout.addWidget(filterLabel)
         self.fVLayout.addWidget(self.fFilterDropDown)
+        self.fVLayout.addWidget(self.fStateDropDown)
+        self.fVLayout.addWidget(self.fFilterInput)
+        self.fVLayout.addWidget(self.fResponsiblePersonDropDown)
+        self.fVLayout.addWidget(self.fFilterSearchButton)
 
-        self.fVLayout.addWidget(self.fFilterButton)
         self.fVLayout.setContentsMargins(0,0,0,0)
         self.fVLayout.setSpacing(5)
 
@@ -78,18 +86,18 @@ class MainPage(Page):
         filterWidget.setFixedSize(200,100)
 
         return filterWidget
-    def filterIndexChanged(self):
-        model = Model()
-        model.load()
-        allResponsibles = [UserRole.RESPONSIBLE.value, UserRole.TEACHER.value, UserRole.ADMIN.value]
-        stateList = ['Gebraucht', 'In Reparatur', 'Bestellt', 'Ausgemustert', 'Verliehen', 'Geliefert', 'Geplant', 'Angefordert']
-        #ItemState enum benutzen
-        self.fFilterWidget = self.createDropDownFilterWidget(self.filterHeaders, allResponsibles,  stateList, False)
-        self.fFilterWidget.move(0, 200)
-        self.fFilterWidget.show()
-        self.fFilterDropDown.currentIndexChanged.connect(self.filterIndexChanged)
+        
 
     def styleSheet(self):
         self.fSidePanel.setStyleSheet('background: Gainsboro')
         self.fHeader.setStyleSheet('background: grey')
     
+    def getAllResponsibiltityUserNames(self):
+        model = Model()
+        model.load()
+        users = model.users
+        responsibilityUserNames = []
+        for user in users:
+            if user.role.value == UserRole.RESPONSIBLE.value:
+                responsibilityUserNames.append(user.userName)
+        return responsibilityUserNames
