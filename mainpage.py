@@ -4,7 +4,6 @@ from PyQt6.QtCore import Qt
 
 from itemheader import ItemHeader
 from model import Model
-from userrole import UserRole
 
 class MainPage(Page):
     fTitle: QLabel
@@ -49,7 +48,7 @@ class MainPage(Page):
         )
 
         self.fSidePanel = self.createSidepanel()
-        self.fFilterWidget = self.createDropDownFilterWidget(self.filterHeaders, personTypeList,  stateList, True)
+        self.fFilterWidget = self.createDropDownFilterWidget(self.filterHeaders)
         self.fFilterWidget.move(0, 200)
 
         self.fHeaderButton.raise_()
@@ -57,7 +56,7 @@ class MainPage(Page):
         self.fAddItemButton.raise_()
         
 
-    def createDropDownFilterWidget(self, filterHeaders: list, personTypeList: list, stateList: list, isFirstTime: bool):
+    def createDropDownFilterWidget(self, filterHeaders: list):
         filterWidget = QWidget(self)
 
         filterLabel = self.createText('Suche:')
@@ -69,7 +68,7 @@ class MainPage(Page):
         stateList = ['Gebraucht', 'In Reparatur', 'Bestellt', 'Ausgemustert', 'Verliehen', 'Geliefert', 'Geplant', 'Angefordert']
         self.fStateDropDown = self.createDropDownMenu(stateList)
         self.fFilterInput = self.createInput('Hier eingeben.')
-        allResponsibles = self.getAllResponsibiltityUserNames()
+        allResponsibles = Model().getAllResponsibiltityUserNames()
         self.fResponsiblePersonDropDown = self.createDropDownMenu(allResponsibles)
 
         self.fVLayout.addWidget(filterLabel)
@@ -91,13 +90,3 @@ class MainPage(Page):
     def styleSheet(self):
         self.fSidePanel.setStyleSheet('background: Gainsboro')
         self.fHeader.setStyleSheet('background: grey')
-    
-    def getAllResponsibiltityUserNames(self):
-        model = Model()
-        model.load()
-        users = model.users
-        responsibilityUserNames = []
-        for user in users:
-            if user.role.value == UserRole.RESPONSIBLE.value:
-                responsibilityUserNames.append(user.userName)
-        return responsibilityUserNames

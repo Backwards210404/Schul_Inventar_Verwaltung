@@ -12,3 +12,6 @@
     border-color: whitesmoke;
     font:medium;
 }
+.loginElements, select, textarea{
+    color: #ffffff;
+}

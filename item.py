@@ -8,7 +8,7 @@ class Item:
     subject: str
     location: str
     responsiblePerson: User
-    state: ItemState
+    state: str
 
     def __init__(self,group,department, subject, location, responsiblePerson, state):
         self.group = group

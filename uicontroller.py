@@ -99,7 +99,6 @@ class UIController:
     def initInventoryPageEvents(self):
         self.selectInputForMainPage()
         self.ui.fMainPage.fFilterDropDown.currentIndexChanged.connect(self.selectInputForMainPage)
-        #self.ui.fMainPage.fFilterButton.clicked.connect(self.)
         self.ui.fMainPage.fAddItemButton.clicked.connect(self.onAddItem)
         self.ui.fMainPage.fFilterSearchButton.clicked.connect(self.onSearchInItemTable)
         self.ui.fMainPage.fHeaderButton.clicked.connect(self.onLogout)
@@ -153,7 +152,7 @@ class UIController:
                 table.setItem(rowCount, 4, QTableWidgetItem(''))
             else:
                 table.setItem(rowCount, 4, QTableWidgetItem(item.responsiblePerson.userName))
-            table.setItem(rowCount, 5, QTableWidgetItem(item.state.value))
+            table.setItem(rowCount, 5, QTableWidgetItem(item.state))
             table.setCellWidget(rowCount, 6, self.getDeleteButton(table))
         finally:
             table.blockSignals(False)
@@ -161,18 +160,24 @@ class UIController:
 
     def onSearchInItemTable(self):
         attribute = self.ui.fMainPage.fFilterDropDown.currentText()
-        searchText = self.ui.fMainPage.fFilterInput.text().lower()
+        if not self.ui.fMainPage.fStateDropDown.visibleRegion().isEmpty():
+            searchText = self.ui.fMainPage.fStateDropDown.currentText().lower()
+        elif not self.ui.fMainPage.fResponsiblePersonDropDown.visibleRegion().isEmpty():
+            searchText = self.ui.fMainPage.fResponsiblePersonDropDown.currentText().lower()
+        else:
+            searchText = self.ui.fMainPage.fFilterInput.text().lower()
 
         if not searchText:
             self.loadItemTableData()
             return
 
         attributeMap = {
-            'Gruppe': 'group',
-            'Abteilung': 'department',
-            'Fach': 'subject',
-            'Ort': 'location',
-            'Verantworlicher': 'responsiblePerson'
+            ItemHeader.GROUP.value: 'group',
+            ItemHeader.DEPARTMENT.value: 'department',
+            ItemHeader.SUBJECT.value: 'subject',
+            ItemHeader.LOCATION.value: 'location',
+            ItemHeader.RESPONSIBLE.value: 'responsiblePerson',
+            ItemHeader.STATE.value: 'state',
         }
 
         table = self.ui.fMainPage.fTable
@@ -197,7 +202,7 @@ class UIController:
                             resp_name = str(item.responsiblePerson)
 
                     table.setItem(rowCount, 4, QTableWidgetItem(resp_name))
-                    table.setItem(rowCount, 5, QTableWidgetItem(item.state.value))
+                    table.setItem(rowCount, 5, QTableWidgetItem(item.state))
                     table.setCellWidget(rowCount,6, self.getDeleteButton(table))
         table.setEditTriggers(QTableWidget.EditTrigger.AllEditTriggers)
 

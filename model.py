@@ -93,3 +93,12 @@ class Model:
             if u.userName == userName and u.password == password:
                 return u
         return None
+
+    def getAllResponsibiltityUserNames(self):
+        self.load()
+        users = self.users
+        responsibilityUserNames = []
+        for user in users:
+            if user.role.value == UserRole.RESPONSIBLE.value:
+                responsibilityUserNames.append(user.userName)
+        return responsibilityUserNames
