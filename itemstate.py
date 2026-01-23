@@ -18,9 +18,9 @@ def normalizeText(text: str) -> ItemState:
 
     for state in ItemState:
         if state.value.lower() == str(text).lower():
-            return state.value
+            return state
 
-    return ItemState.USED.value
+    return ItemState.USED
 
 
 def normalizeItems(items: list) -> list:

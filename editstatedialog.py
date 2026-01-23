@@ -35,7 +35,7 @@ class EditItemStateDialog(QDialog):
         for s in states:
             self.fStateDropDown.addItem(s.value)
 
-        self.fStateDropDown.setCurrentText(self.item.state)
+        self.fStateDropDown.setCurrentText(self.item.state.value)
 
         self.fSaveButton = QPushButton('Status aktualisieren')
         self.fSaveButton.clicked.connect(self.onSave)

@@ -35,10 +35,6 @@ class MainPage(Page):
         self.fVLayout = QVBoxLayout()
         distanceSidePanel = 200
 
-        personTypeList = ['Schüler', 'Lehrer', 'Admin']
-
-        stateList = ['Gebraucht', 'In Reparatur', 'Bestellt', 'Ausgemustert', 'Verliehen', 'Geliefert', 'Geplant', 'Angefordert']
-
         self.fTable = self.createTable(self.tableHeaders ,x = distanceSidePanel, y = 50, width = 850)
         self.fTable.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         self.fHeader = self.createHeader(

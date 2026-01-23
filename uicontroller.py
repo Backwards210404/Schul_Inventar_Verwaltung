@@ -131,8 +131,6 @@ class UIController:
                 if item:
                     self.model.addItem(item)
                     self.model.save()
-                    if hasattr(self, 'items'):
-                        self.items.append(item)
 
                     self.addToTable(item)
         finally:
@@ -152,7 +150,7 @@ class UIController:
                 table.setItem(rowCount, 4, QTableWidgetItem(''))
             else:
                 table.setItem(rowCount, 4, QTableWidgetItem(item.responsiblePerson.userName))
-            table.setItem(rowCount, 5, QTableWidgetItem(item.state))
+            table.setItem(rowCount, 5, QTableWidgetItem(item.state.value))
             table.setCellWidget(rowCount, 6, self.getDeleteButton(table))
         finally:
             table.blockSignals(False)
@@ -186,7 +184,10 @@ class UIController:
         for item in self.items:
             itemAttribute = attributeMap.get(attribute)
             if itemAttribute:
-                itemValue = getattr(item, itemAttribute, '').lower()
+                if attribute == ItemHeader.STATE.value:
+                    itemValue = getattr(item, itemAttribute, '').value.lower()
+                else:
+                    itemValue = getattr(item, itemAttribute, '').lower()
                 if searchText in itemValue:
                     rowCount = table.rowCount()
                     table.insertRow(rowCount)
@@ -202,7 +203,11 @@ class UIController:
                             resp_name = str(item.responsiblePerson)
 
                     table.setItem(rowCount, 4, QTableWidgetItem(resp_name))
-                    table.setItem(rowCount, 5, QTableWidgetItem(item.state))
+                    state_val = ""
+                    if hasattr(item, 'state') and item.state:
+                        state_val = item.state.value if hasattr(item.state, 'value') else str(item.state)
+
+                    table.setItem(rowCount, 5, QTableWidgetItem(state_val))
                     table.setCellWidget(rowCount,6, self.getDeleteButton(table))
         table.setEditTriggers(QTableWidget.EditTrigger.AllEditTriggers)
 
@@ -422,7 +427,7 @@ class UIController:
                 item.subject,
                 item.location,
                 item.responsiblePerson,
-                item.state
+                item.state.value
         ])
         with open('export.csv', 'w', newline='') as csvfile:
             writer = csv.writer(csvfile)
