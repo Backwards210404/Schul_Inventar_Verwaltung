@@ -16,6 +16,7 @@ class MainPage(Page):
     fFilterDropDown: QComboBox
     fFilterInput: QLineEdit
     fFilterSearchButton: QPushButton
+    fFilterResetButton: QPushButton
     fStateDropDown: QComboBox
     fResponsiblePersonDropDown: QComboBox
     fFilterWidget = QWidget
@@ -59,6 +60,7 @@ class MainPage(Page):
         filterLabel.setMinimumHeight(20)
         self.fFilterDropDown = self.createDropDownMenu(filterHeaders)
         self.fFilterSearchButton = self.createButton('Suchen')
+        self.fFilterResetButton = self.createButton('Filter Zurücksetzen')
         self.fFilterSearchButton.setMinimumHeight(22)
 
         stateList = ['Gebraucht', 'In Reparatur', 'Bestellt', 'Ausgemustert', 'Verliehen', 'Geliefert', 'Geplant', 'Angefordert']
@@ -73,12 +75,12 @@ class MainPage(Page):
         self.fVLayout.addWidget(self.fFilterInput)
         self.fVLayout.addWidget(self.fResponsiblePersonDropDown)
         self.fVLayout.addWidget(self.fFilterSearchButton)
-
+        self.fVLayout.addWidget(self.fFilterResetButton)
         self.fVLayout.setContentsMargins(0,0,0,0)
         self.fVLayout.setSpacing(5)
 
         filterWidget.setLayout(self.fVLayout)
-        filterWidget.setFixedSize(200,100)
+        filterWidget.setFixedSize(200,130)
 
         return filterWidget
         

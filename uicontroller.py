@@ -28,6 +28,7 @@ class UIController:
     user: User
     def __init__(self):
         self._is_editing = False
+        self._filter_using = False
         self.ui = UI()
         self.model = Model()
         self.ui.showLoginPage()
@@ -103,6 +104,10 @@ class UIController:
         self.ui.fMainPage.fFilterSearchButton.clicked.connect(self.onSearchInItemTable)
         self.ui.fMainPage.fHeaderButton.clicked.connect(self.onLogout)
         self.ui.fMainPage.fExportButton.clicked.connect(self.createCsvExportFile)
+
+        self.ui.fMainPage.fFilterResetButton.clicked.connect(self.refreshItems)
+        self.ui.fMainPage.fFilterResetButton.clicked.connect(self.loadItemTableData)
+
         self.refreshItems()
         self.loadItemTableData()
         if self.user.getRole() == UserRole.RESPONSIBLE:
@@ -157,6 +162,7 @@ class UIController:
 
 
     def onSearchInItemTable(self):
+        self._filter_using = True
         attribute = self.ui.fMainPage.fFilterDropDown.currentText()
         if not self.ui.fMainPage.fStateDropDown.visibleRegion().isEmpty():
             searchText = self.ui.fMainPage.fStateDropDown.currentText().lower()
@@ -210,6 +216,7 @@ class UIController:
                     table.setItem(rowCount, 5, QTableWidgetItem(state_val))
                     table.setCellWidget(rowCount,6, self.getDeleteButton(table))
         table.setEditTriggers(QTableWidget.EditTrigger.AllEditTriggers)
+        self._filter_using = False
 
     def onAddUser(self):
         dialog = AddUserDialog()
@@ -221,7 +228,7 @@ class UIController:
                 self.loadUserTableData()
 
     def onItemChanged(self, item):
-        if self._is_editing:
+        if self._is_editing or self._filter_using:
             return
         self._is_editing = True
         try:
@@ -419,15 +426,23 @@ class UIController:
     def createCsvExportFile(self):
         csvContent = []
         csvHeader = ['Gruppe', 'Abteilung', 'Fach', 'Ort', 'Verantworlicher', 'Zustand']
+        tableContent = []
+        mainTable = self.ui.fMainPage.fTable
+        for row in range(mainTable.rowCount()):
+            rowContent = []
+            for column in range(mainTable.columnCount()):
+                tableitem = mainTable.item(row, column)
+                rowContent.append(tableitem.text() if tableitem else "")
+            tableContent.append(rowContent)
         csvContent.append(csvHeader)
-        for item in self.items:
+        for tableitem in tableContent:
             csvContent.append([
-                item.group,
-                item.department,
-                item.subject,
-                item.location,
-                item.responsiblePerson,
-                item.state.value
+                tableitem[0],
+                tableitem[1],
+                tableitem[2],
+                tableitem[3],
+                tableitem[4],
+                tableitem[5]
         ])
         with open('export.csv', 'w', newline='') as csvfile:
             writer = csv.writer(csvfile)
