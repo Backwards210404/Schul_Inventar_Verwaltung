@@ -215,7 +215,6 @@ class UIController:
 
                     table.setItem(rowCount, 5, QTableWidgetItem(state_val))
                     table.setCellWidget(rowCount,6, self.getDeleteButton(table))
-        table.setEditTriggers(QTableWidget.EditTrigger.AllEditTriggers)
         self._filter_using = False
 
     def onAddUser(self):
