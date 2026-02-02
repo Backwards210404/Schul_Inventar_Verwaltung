@@ -1,3 +1,4 @@
+import hashlib
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import Qt
 from user import User
@@ -83,10 +84,12 @@ class AddUserDialog(QDialog):
             firstName=firstName,
             lastName=lastName,
             userName=userName,
-            password=password,
+            password= self.hashPassword(password),
             role=role
         )
         self.accept()
+    def hashPassword(self, password: str) -> str:
+        return hashlib.sha256(password.encode()).hexdigest()
 
     def getUser(self) -> User | None:
         return self.user

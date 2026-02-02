@@ -16,6 +16,7 @@ class AdminPage(Page):
         self.styleSheet()
     def createInputWidgets(self):
         self.fHeaderButton = self.createButton('Logout', 850, 6)
+        self.fHeaderButton.raise_()
 
     def createMainWidgets(self):
         self.fTable = self.createTable(['Vorname', 'Nachname', 'Nutzername', 'Rolle', 'Löschen'],x = 0, y = 50)
