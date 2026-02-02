@@ -16,7 +16,6 @@ class AdminPage(Page):
         self.styleSheet()
     def createInputWidgets(self):
         self.fHeaderButton = self.createButton('Logout', 850, 6)
-        self.fHeaderButton.raise_()
 
     def createMainWidgets(self):
         self.fTable = self.createTable(['Vorname', 'Nachname', 'Nutzername', 'Rolle', 'Löschen'],x = 0, y = 50)
@@ -26,6 +25,7 @@ class AdminPage(Page):
         )
         self.fAddItemButton = self.createButton('+', self.width - 80, self.height - 80)
         self.fAddItemButton.setFixedSize(60, 60)
+        self.fHeaderButton.raise_()
 
     def styleSheet(self):
         styleSheet = open('./stylesheets/admin.css').read()
