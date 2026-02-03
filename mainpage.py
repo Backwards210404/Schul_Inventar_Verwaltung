@@ -1,6 +1,6 @@
 from page import Page
 from PyQt6.QtWidgets import *
-from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QPixmap
 
 from itemheader import ItemHeader
 from model import Model
@@ -47,7 +47,11 @@ class MainPage(Page):
         self.fSidePanel = self.createSidepanel()
         self.fFilterWidget = self.createDropDownFilterWidget(self.filterHeaders)
         self.fFilterWidget.move(0, 200)
-
+        pixmap = QPixmap("mockup/walter.png")
+        label = QLabel(self)
+        label.setPixmap(pixmap)
+        label.setScaledContents(True)
+        label.setFixedSize(200,200)
         self.fHeaderButton.raise_()
         self.fExportButton.raise_()
         self.fAddItemButton.raise_()
