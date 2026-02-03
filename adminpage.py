@@ -1,5 +1,6 @@
 from page import Page
 from PyQt6.QtWidgets import *
+from PyQt6.QtGui import QPixmap
 
 class AdminPage(Page):
     fTitle: QLabel
@@ -25,6 +26,12 @@ class AdminPage(Page):
         )
         self.fAddItemButton = self.createButton('+', self.width - 80, self.height - 80)
         self.fAddItemButton.setFixedSize(60, 60)
+        pixmap = QPixmap("mockup/zen.png")
+        label = QLabel(self)
+        label.setPixmap(pixmap)
+        label.setScaledContents(True)
+        label.setFixedSize(200,200)
+        label.move(self.width - 250, self.height - 400)
         self.fHeaderButton.raise_()
 
     def styleSheet(self):
