@@ -2,7 +2,6 @@ from PyQt6.uic.properties import QtGui
 
 from page import Page
 from PyQt6.QtWidgets import *
-from PyQt6.QtGui import QColor, QPalette
 
 class LoginPage(Page):
     fLoginButton:QPushButton
@@ -13,8 +12,6 @@ class LoginPage(Page):
     def __init__(self):
         super().__init__()
         self.setWindowTitle('Login')
-        self.createInputWidgets()
-        self.createLayoutWithWidgets()
         self.styleSheet()
     def createInputWidgets(self):
         self.fUserName = self.createInput('Benutzername')
@@ -22,10 +19,8 @@ class LoginPage(Page):
         self.fPassword.setEchoMode(QLineEdit.EchoMode.Password)
         self.fLoginButton = self.createButton('Anmelden')
         self.fTitle = self.createTitle('Willkommen!')
-    def showPage(self):
-        self.show()
 
-    def createLayoutWithWidgets(self):
+    def createMainWidgets(self):
         centralWidget = QWidget()
         self.fUserName.setProperty('class', 'loginElements')
         self.fPassword.setProperty('class', 'loginElements')
