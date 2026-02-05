@@ -5,6 +5,10 @@ from itemstate import normalizeItems
 from user import User
 from item import Item
 from userrole import normalizeUsers, UserRole
+from department import Department
+from subject import Subject
+from groups import Group
+from teacher import Teacher
 
 
 class Model:
@@ -12,6 +16,10 @@ class Model:
         self.db_path = db_path
         self.users: List[User] = []
         self.items: List[Item] = []
+        self.departments: List[Department] = []
+        self.subjects: List[Subject] = []
+        self.groups: List[Group] = []
+        self.teachers: List[Teacher] = []
         self.load()
 
     def _ensure_tables(self, conn: sqlite3.Connection) -> None:
@@ -34,6 +42,27 @@ class Model:
             ResponsiblePerson TEXT,
             State TEXT
         )""")
+        conn.execute("""
+        CREATE TABLE IF NOT EXISTS Departments (
+            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+            Name TEXT
+        )""")
+        conn.execute("""
+        CREATE TABLE IF NOT EXISTS Subjects (
+            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+            Name TEXT
+        )""")
+        conn.execute("""
+        CREATE TABLE IF NOT EXISTS Groups (
+            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+            Name TEXT
+        )""")
+        conn.execute("""
+        CREATE TABLE IF NOT EXISTS Teachers (
+            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+            FirstName TEXT,
+            LastName TEXT
+        )""")
         conn.commit()
 
     def save(self) -> None:
@@ -51,6 +80,31 @@ class Model:
                 conn.executemany(
                     "INSERT INTO Items (GroupName, Department, Subject, Location, ResponsiblePerson, State) VALUES (?, ?, ?, ?, ?, ?)",
                     ((i.group, i.department, i.subject, i.location, i.responsiblePerson.userName if isinstance(i.responsiblePerson, User) else i.responsiblePerson, i.state.value if hasattr(i.state, 'value') else i.state) for i in self.items)
+                )
+
+            conn.execute("DELETE FROM Departments")
+            if self.departments:
+                conn.executemany(
+                    "INSERT INTO Departments (Name) VALUES (?)",
+                    ((u.name) for u in self.departments)
+                )
+            conn.execute("DELETE FROM Subjects")
+            if self.departments:
+                conn.executemany(
+                    "INSERT INTO Subjects (Name) VALUES (?)",
+                    ((u.name) for u in self.subjects)
+                )
+            conn.execute("DELETE FROM Groups")
+            if self.departments:
+                conn.executemany(
+                    "INSERT INTO Groups (Name) VALUES (?)",
+                    ((u.name) for u in self.groups)
+                )
+            conn.execute("DELETE FROM Teachers")
+            if self.departments:
+                conn.executemany(
+                    "INSERT INTO Teachers (FirstName, LastName) VALUES (?,?)",
+                    ((u.firstName,u.lastName) for u in self.teachers)
                 )
 
     def load(self) -> None:

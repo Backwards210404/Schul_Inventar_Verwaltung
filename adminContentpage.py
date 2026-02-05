@@ -2,7 +2,7 @@ from page import Page
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import QPixmap
 
-class AdminPage(Page):
+class AdminContentPage(Page):
     fTitle: QLabel
     fHeader: QFrame
     fSidePanel: QFrame
@@ -19,7 +19,7 @@ class AdminPage(Page):
         self.fHeaderButton = self.createButton('Logout', 850, 6)
 
     def createMainWidgets(self):
-        self.fTable = self.createTable(['Vorname', 'Nachname', 'Nutzername', 'Rolle', 'Löschen'],x = 0, y = 50)
+        self.fTable = self.createTable(['Vorname', 'Nachname', 'Nutzername', 'Rolle', 'Löschen'],x = 200, y = 50)
         self.fHeader = self.createHeader(
         'Admin Seite',
         width = 1000,
@@ -31,7 +31,7 @@ class AdminPage(Page):
         label.setPixmap(pixmap)
         label.setScaledContents(True)
         label.setFixedSize(200,200)
-        label.move(self.width - 250, self.height - 400)
+        
         self.fHeaderButton.raise_()
 
     def styleSheet(self):

@@ -67,8 +67,8 @@ class UIController:
                 return
             if self.user.getRole() == UserRole.ADMIN:
                 self.ui.hideLoginPage()
-                self.ui.showAdminPage()
-                self.initAdminPageEvents()
+                self.ui.showAdminUserPage()
+                self.initAdminUserPageEvents()
             else:
                 self.ui.hideLoginPage()
                 self.ui.showInventoryPage()
@@ -86,14 +86,14 @@ class UIController:
         self.ui.fLoginPage.fLoginButton.clicked.connect(self.onLogin)
         self.ui.fLoginPage.fPassword.returnPressed.connect(self.onLogin)
 
-    def initAdminPageEvents(self):
-        self.ui.fAdminPage.fAddItemButton.clicked.connect(self.onAddUser)
-        self.ui.fAdminPage.fHeaderButton.clicked.connect(self.onLogout)
+    def initAdminUserPageEvents(self):
+        self.ui.fAdminUserPage.fAddItemButton.clicked.connect(self.onAddUser)
+        self.ui.fAdminUserPage.fHeaderButton.clicked.connect(self.onLogout)
         self.refreshUsers()
         self.loadUserTableData()
 
-        self.ui.fAdminPage.fTable.itemChanged.connect(self.onUserChanged)
-        self.ui.fAdminPage.fTable.itemClicked.connect(self.openEditUserRoleDialog)
+        self.ui.fAdminUserPage.fTable.itemChanged.connect(self.onUserChanged)
+        self.ui.fAdminUserPage.fTable.itemClicked.connect(self.openEditUserRoleDialog)
 
     def initInventoryPageEvents(self):
         self.selectInputForMainPage()
@@ -376,7 +376,7 @@ class UIController:
         table.blockSignals(False)
 
     def loadUserTableData(self):
-        table = self.ui.fAdminPage.fTable
+        table = self.ui.fAdminUserPage.fTable
         table.setRowCount(0)
         for user in self.users:
             rowCount = table.rowCount()
@@ -394,7 +394,7 @@ class UIController:
         self.ui.showLoginPage()
 
     def showCSVMessage(self):
-        csvDialog = QMessageBox(self.ui.fAdminPage)
+        csvDialog = QMessageBox(self.ui.fAdminUserPage)
         csvDialog.setIcon(QMessageBox.Icon.Information)
         csvDialog.setWindowTitle('Tabelle exportiert')
         csvDialog.setText('Die Tabelle wurde in einer CSV Datei exportiert!')
