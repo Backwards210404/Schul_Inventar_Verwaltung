@@ -1,8 +1,6 @@
 from PyQt6.QtCore import Qt
 from itemstate import normalizeText, normalizeItems
 from adduserdialog import AddUserDialog
-from editresponsiblepersondialog import EditResponsiblePersonDialog
-from editstatedialog import EditItemStateDialog
 from edituserroledialog import EditUserRoleDialog
 from item import Item
 from itemheader import ItemHeader
@@ -115,7 +113,7 @@ class UIController:
             self.ui.fMainPage.fAddItemButton.setEnabled(True)
             self.ui.fMainPage.fTable.itemChanged.connect(self.onItemChanged)
             self.ui.fMainPage.fTable.itemClicked.connect(self.handleItemClick)
-            self.ui.fMainPage.fTable.setEditTriggers(QAbstractItemView.EditTrigger.DoubleClicked)
+            self.ui.fMainPage.fTable.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
 
         else:
             self.ui.fMainPage.fTable.setEnabled(False)
@@ -264,11 +262,7 @@ class UIController:
                 self.users.__getitem__(row).role = newValue
 
     def handleItemClick(self, item):
-        row = item.row()
-        col = item.column()
-        selectedItem = self.items[row]
-        if col == 5 or col == 4:
-            self.openEditChangeDialog(item, selectedItem)
+        self.openEditChangeDialog(item)
 
     def openEditUserRoleDialog(self, item):
         if self._is_editing:
@@ -304,25 +298,10 @@ class UIController:
 
             self.ui.fMainPage.fStateDropDown.hide()
             self.ui.fMainPage.fResponsiblePersonDropDown.hide()
-    def openEditChangeDialog(self, item, selectedItem):
-        if self._is_editing:
-            return
-
-        col = item.column()
-        self._is_editing = True
-
+    def openEditChangeDialog(self, item):
         try:
-            dialog = None
-            if col == 4:
-                dialog = EditResponsiblePersonDialog(selectedItem, self.responsiblePersons, self.ui.fMainPage)
-            elif col == 5:
-                dialog = EditItemStateDialog(selectedItem, self.ui.fMainPage)
+            dialog = AddItemDialog(self.responsiblePersons, self.ui.fMainPage, item)
             if dialog and dialog.exec():
-                if col == 4:
-                    item.setText(selectedItem.responsiblePerson.userName if hasattr(selectedItem.responsiblePerson, 'userName') else selectedItem.responsiblePerson)
-                elif col == 5:
-                    item.setText(
-                        selectedItem.state.value if hasattr(selectedItem.state, 'value') else selectedItem.state)
 
                 self.model.save()
                 self.loadItemTableData()
